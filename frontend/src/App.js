@@ -11,6 +11,10 @@ function App() {
 
       <textarea placeholder="Type your next prompt here..."></textarea>
 
+      <button>Continue</button>
+      <button>Undo</button>
+      <button>Regenerate</button>
+
       <footer>© 2025 Infinite Story Generator. Created by Vincent Le & Elena Parapounsky.</footer>
     </div>
   );
