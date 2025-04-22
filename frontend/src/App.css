@@ -20,5 +20,8 @@
 textarea {
   width: 45%;
   height: 100px;
-  
+}
+
+footer {
+  padding: 15px;
 }
