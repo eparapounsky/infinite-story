@@ -6,12 +6,18 @@ import { AiOutlineRedo } from "react-icons/ai";
 function App() {
   return (
     <div className="App">
-      {/* <header className="App-header">
-        <p>Infinite Story Generator</p>
-      </header> */}
 
-      <h1>Infinite Story Generator</h1>
+      <div className="header">
+        <h1>Infinite Story Generator</h1>
+        <button>New Story</button>
+      </div>
 
+      <div className="dropdowns">
+        <select><option value="">Genre</option></select>
+        <select><option value="">Tone</option></select>
+        <select><option value="">Theme</option></select>
+      </div>
+      
       <textarea placeholder="Type your next prompt here..."></textarea>
 
       <div className="buttons">
