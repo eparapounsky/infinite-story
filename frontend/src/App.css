@@ -20,6 +20,15 @@
 textarea {
   width: 45%;
   height: 100px;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 footer {
