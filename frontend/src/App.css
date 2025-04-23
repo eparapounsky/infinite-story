@@ -19,6 +19,18 @@
   color: white;
 }
 
+.dropdowns {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.dropdowns select {
+  padding: 3px;
+  border-radius: 5px;
+}
+
 textarea {
   width: 45%;
   height: 100px;
