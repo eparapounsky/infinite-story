@@ -9,13 +9,21 @@ function App() {
 
       <div className="header">
         <h1>Infinite Story Generator</h1>
-        <button>New Story</button>
+        <button id="new-story">New Story</button>
       </div>
 
       <div className="dropdowns">
-        <select><option value="">Genre</option></select>
-        <select><option value="">Tone</option></select>
-        <select><option value="">Theme</option></select>
+        <select>
+          <option value="">Genre</option>
+        </select>
+
+        <select>
+          <option value="">Tone</option>
+        </select>
+
+        <select>
+          <option value="">Theme</option>
+        </select>
       </div>
       
       <textarea placeholder="Type your next prompt here..."></textarea>
