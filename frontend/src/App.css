@@ -2,6 +2,23 @@
   text-align: center;
 }
 
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+#new-story {
+  padding: 7px;
+  margin-left: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border-width: 1px;
+  background-color: green;
+  color: white;
+}
+
 textarea {
   width: 45%;
   height: 100px;
