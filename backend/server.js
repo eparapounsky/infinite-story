@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 5000
 const OpenAI = require("openai");
+require('dotenv').config(); // load environment variables
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
