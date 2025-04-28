@@ -20,21 +20,26 @@ app.get('/', (req, res) => {
 app.post('/story', async (req, res) => { 
   const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
 
-  // send prompt to openai
-  // API reference: https://platform.openai.com/docs/api-reference/chat/create?lang=node.js
-  const completion = await openai.chat.completions.create({
-    model: 'gpt-4o', // model can be changed; available models- https://platform.openai.com/docs/models
-    messages: [
-      { role: 'system', content: 'You are an imaginative storyteller.' }, // high level instructions
-      { role: 'user', content: prompt }, // prompt from user
-    ],
-  });
+  try {
+    // send prompt to openai
+    // API reference: https://platform.openai.com/docs/api-reference/chat/create?lang=node.js
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o', // model can be changed; available models- https://platform.openai.com/docs/models
+      messages: [
+        { role: 'system', content: 'You are an imaginative storyteller.' }, // high level instructions
+        { role: 'user', content: prompt }, // prompt from user
+      ],
+    });
 
-  // receive story response from openai
-  const response = completion.choices[0].message.content;
+    // receive story response from openai
+    const response = completion.choices[0].message.content;
 
-  // send story to frontend
-  res.json({story: response});
+    // send story to frontend
+    res.json({story: response}); // use "story" as key in frontend
+  } catch (error) {
+    console.error('Error occurred creating story.');
+    res.status(500).json({error:'Error occurred creating story.'});
+  }
 });
 
 // start the server
