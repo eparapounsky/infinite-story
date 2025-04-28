@@ -17,7 +17,13 @@ app.get('/', (req, res) => {
 });
 
 app.post('/story', (req, res) => {
-  
+  const prompt = req.body.prompt; // extract user prompt
+
+  // send prompt to openai
+
+  // receive response from openai
+
+  // send story to frontend
 });
 
 // call API 1
