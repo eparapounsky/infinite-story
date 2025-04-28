@@ -2,9 +2,11 @@ import express from 'express';
 const app = express();
 const port = 5000;
 import OpenAI from 'openai';
+app.use(express.json());
 // load environment variables
 import dotenv from 'dotenv';
 dotenv.config();
+
 
 // initialize openai client
 const openai = new OpenAI({
@@ -16,10 +18,17 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
-app.post('/story', (req, res) => {
-  const prompt = req.body.prompt; // extract user prompt
+app.post('/story', (req, res) => { 
+  const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
 
   // send prompt to openai
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4o',
+    messages: [
+      { role: 'developer', content: 'Talk like a pirate.' },
+      { role: 'user', content: 'Are semicolons optional in JavaScript?' },
+    ],
+  });
 
   // receive response from openai
 
@@ -34,13 +43,13 @@ app.post('/story', (req, res) => {
 // console.log(response.output_text);
 
 // call API 2
-// const completion = await openai.chat.completions.create({
-//   model: 'gpt-4o',
-//   messages: [
-//     { role: 'developer', content: 'Talk like a pirate.' },
-//     { role: 'user', content: 'Are semicolons optional in JavaScript?' },
-//   ],
-// });
+const completion = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    { role: 'developer', content: 'Talk like a pirate.' },
+    { role: 'user', content: 'Are semicolons optional in JavaScript?' },
+  ],
+});
 // console.log(completion.choices[0].message.content);
 
 // start the server
