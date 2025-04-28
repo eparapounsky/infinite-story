@@ -1,46 +1,50 @@
-import express from 'express'
-const app = express()
-const port = 5000
-import OpenAI from 'openai'
+import express from 'express';
+const app = express();
+const port = 5000;
+import OpenAI from 'openai';
 // load environment variables
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from 'dotenv';
+dotenv.config();
 
 // initialize openai client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-})
+});
 
 // express routes
 app.get('/', (req, res) => {
   res.send('Hello World!')
-})
+});
 
+app.post('/story', (req, res) => {
+  
+});
+
+// call API 1
 // const response = await openai.responses.create({
 //     model: "gpt-4.1",
 //     input: "Write a one-sentence bedtime story about a unicorn.",
 // });
-
 // console.log(response.output_text);
 
-const completion = await openai.chat.completions.create({
-  model: 'gpt-4o',
-  messages: [
-    { role: 'developer', content: 'Talk like a pirate.' },
-    { role: 'user', content: 'Are semicolons optional in JavaScript?' },
-  ],
-});
-
-console.log(completion.choices[0].message.content);
+// call API 2
+// const completion = await openai.chat.completions.create({
+//   model: 'gpt-4o',
+//   messages: [
+//     { role: 'developer', content: 'Talk like a pirate.' },
+//     { role: 'user', content: 'Are semicolons optional in JavaScript?' },
+//   ],
+// });
+// console.log(completion.choices[0].message.content);
 
 // start the server
 app.listen(port, () => {
   console.log(`App  listening on port ${port}`)
-})
+});
 
 // Citation for file structure
 // Date: 4/22/2025
-// Copied from: https://expressjs.com/en/starter/hello-world.html
+// Adapted from: https://expressjs.com/en/starter/hello-world.html
 
 // Citation for adding OpenAI API
 // Date: 4/27/2025
