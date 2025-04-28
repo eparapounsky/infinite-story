@@ -18,12 +18,12 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
-app.post('/story', (req, res) => { 
+app.post('/story', async (req, res) => { 
   const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
 
   // send prompt to openai
   const completion = await openai.chat.completions.create({
-    model: 'gpt-4o',
+    model: 'gpt-4o', // model can be changed; available models- https://platform.openai.com/docs/models
     messages: [
       { role: 'developer', content: 'Talk like a pirate.' },
       { role: 'user', content: 'Are semicolons optional in JavaScript?' },
@@ -43,13 +43,13 @@ app.post('/story', (req, res) => {
 // console.log(response.output_text);
 
 // call API 2
-const completion = await openai.chat.completions.create({
-  model: 'gpt-4o',
-  messages: [
-    { role: 'developer', content: 'Talk like a pirate.' },
-    { role: 'user', content: 'Are semicolons optional in JavaScript?' },
-  ],
-});
+// const completion = await openai.chat.completions.create({
+//   model: 'gpt-4o',
+//   messages: [
+//     { role: 'developer', content: 'Talk like a pirate.' },
+//     { role: 'user', content: 'Are semicolons optional in JavaScript?' },
+//   ],
+// });
 // console.log(completion.choices[0].message.content);
 
 // start the server
