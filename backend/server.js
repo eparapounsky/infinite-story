@@ -7,7 +7,6 @@ app.use(express.json());
 import dotenv from 'dotenv';
 dotenv.config();
 
-
 // initialize openai client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -22,35 +21,20 @@ app.post('/story', async (req, res) => {
   const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
 
   // send prompt to openai
+  // API reference: https://platform.openai.com/docs/api-reference/chat/create?lang=node.js
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o', // model can be changed; available models- https://platform.openai.com/docs/models
     messages: [
-      { role: 'system', content: 'Generate an imaginative story.' },
-      { role: 'user', content: prompt },
+      { role: 'system', content: 'You are an imaginative storyteller.' }, // high level instructions
+      { role: 'user', content: prompt }, // prompt from user
     ],
   });
 
   // receive response from openai
+  const story = completion.choices[0].message.content;
 
   // send story to frontend
 });
-
-// call API 1
-// const response = await openai.responses.create({
-//     model: "gpt-4.1",
-//     input: "Write a one-sentence bedtime story about a unicorn.",
-// });
-// console.log(response.output_text);
-
-// call API 2
-// const completion = await openai.chat.completions.create({
-//   model: 'gpt-4o',
-//   messages: [
-//     { role: 'developer', content: 'Talk like a pirate.' },
-//     { role: 'user', content: 'Are semicolons optional in JavaScript?' },
-//   ],
-// });
-// console.log(completion.choices[0].message.content);
 
 // start the server
 app.listen(port, () => {
@@ -65,7 +49,15 @@ app.listen(port, () => {
 // Date: 4/27/2025
 // Copied from: https://community.openai.com/t/import-error-with-openaiapi-in-node-js-project/549074
 
-// Citation for calls to OpenAI API
+// Citation for call to OpenAI API
 // Date: 4/27/2025
-// (1) Copied from: https://www.npmjs.com/package/openai#:~:text=openai/openai%27%3B-,Usage,-The%20full%20API
-// (2) Copied from: https://platform.openai.com/docs/overview
+// Copied from: https://platform.openai.com/docs/overview
+// call API
+// const completion = await openai.chat.completions.create({
+//   model: 'gpt-4o',
+//   messages: [
+//     { role: 'developer', content: 'Talk like a pirate.' },
+//     { role: 'user', content: 'Are semicolons optional in JavaScript?' },
+//   ],
+// });
+// console.log(completion.choices[0].message.content);
