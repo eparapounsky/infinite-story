@@ -25,8 +25,8 @@ app.post('/story', async (req, res) => {
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o', // model can be changed; available models- https://platform.openai.com/docs/models
     messages: [
-      { role: 'developer', content: 'Talk like a pirate.' },
-      { role: 'user', content: 'Are semicolons optional in JavaScript?' },
+      { role: 'system', content: 'Generate an imaginative story.' },
+      { role: 'user', content: prompt },
     ],
   });
 
