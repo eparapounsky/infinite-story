@@ -30,10 +30,11 @@ app.post('/story', async (req, res) => {
     ],
   });
 
-  // receive response from openai
-  const story = completion.choices[0].message.content;
+  // receive story response from openai
+  const response = completion.choices[0].message.content;
 
   // send story to frontend
+  res.json({story: response});
 });
 
 // start the server
