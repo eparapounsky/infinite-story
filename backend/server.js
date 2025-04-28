@@ -16,13 +16,22 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-const response = await client.responses.create({
+// const response = await openai.responses.create({
+//     model: "gpt-4.1",
+//     input: "Write a one-sentence bedtime story about a unicorn.",
+// });
+
+// console.log(response.output_text);
+
+const completion = await openai.chat.completions.create({
   model: 'gpt-4o',
-  instructions: 'You are a coding assistant that talks like a pirate',
-  input: 'Are semicolons optional in JavaScript?',
+  messages: [
+    { role: 'developer', content: 'Talk like a pirate.' },
+    { role: 'user', content: 'Are semicolons optional in JavaScript?' },
+  ],
 });
 
-console.log(response.output_text);
+console.log(completion.choices[0].message.content);
 
 // start the server
 app.listen(port, () => {
@@ -37,6 +46,7 @@ app.listen(port, () => {
 // Date: 4/27/2025
 // Copied from: https://community.openai.com/t/import-error-with-openaiapi-in-node-js-project/549074
 
-// Citation 
+// Citation for calls to OpenAI API
 // Date: 4/27/2025
-// Copied from: https://www.npmjs.com/package/openai#:~:text=openai/openai%27%3B-,Usage,-The%20full%20API
+// (1) Copied from: https://www.npmjs.com/package/openai#:~:text=openai/openai%27%3B-,Usage,-The%20full%20API
+// (2) Copied from: https://platform.openai.com/docs/overview
