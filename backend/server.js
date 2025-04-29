@@ -17,7 +17,7 @@ app.post('/story', async (req, res) => {
   const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
 
   // validation for prompt
-  if (prompt === "") {
+  if (prompt.trim() === "") {
     res.status(400).json({error:'Prompt is empty.'});
     return;
   }
@@ -30,6 +30,7 @@ app.post('/story', async (req, res) => {
       messages: [
         { role: 'system', content: 'You are an imaginative storyteller.' }, // high level instructions
         { role: 'user', content: prompt }, // prompt from user
+        // maintaining context between prompts? 
       ],
       max_completion_tokens: 300, // length of story 
     });
