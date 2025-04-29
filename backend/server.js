@@ -16,7 +16,11 @@ const openai = new OpenAI({
 app.post('/story', async (req, res) => { 
   const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
 
-  // validation for prompt?
+  // validation for prompt
+  if (prompt === "") {
+    res.status(400).json({error:'Prompt is empty.'});
+    return;
+  }
 
   try {
     // send prompt to openai
