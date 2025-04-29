@@ -1,11 +1,13 @@
-import express from 'express';
-const app = express();
-const port = 5000;
-import OpenAI from 'openai';
-app.use(express.json());
 // load environment variables
 import dotenv from 'dotenv';
 dotenv.config();
+// import APIs
+import express from 'express';
+import OpenAI from 'openai';
+// create app
+const app = express();
+const port = 5000;
+app.use(express.json());
 
 // initialize openai client
 const openai = new OpenAI({
@@ -41,14 +43,14 @@ app.post('/story', async (req, res) => {
     // send story to frontend
     res.json({story: response}); // use "story" as key in frontend
   } catch (error) {
-    console.error('Error occurred creating story.');
+    console.error('Error occurred creating story: ', error);
     res.status(500).json({error:'Error occurred creating story.'});
   }
 });
 
 // start the server
 app.listen(port, () => {
-  console.log(`App  listening on port ${port}`)
+  console.log(`App  listening on port ${port}`);
 });
 
 // Citation for file structure
