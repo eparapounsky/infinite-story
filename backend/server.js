@@ -20,6 +20,8 @@ app.get('/', (req, res) => {
 app.post('/story', async (req, res) => { 
   const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
 
+  // validation for prompt?
+
   try {
     // send prompt to openai
     // API reference: https://platform.openai.com/docs/api-reference/chat/create?lang=node.js
@@ -29,6 +31,7 @@ app.post('/story', async (req, res) => {
         { role: 'system', content: 'You are an imaginative storyteller.' }, // high level instructions
         { role: 'user', content: prompt }, // prompt from user
       ],
+      max_completion_tokens: 300, // length of story 
     });
 
     // receive story response from openai
@@ -57,13 +60,4 @@ app.listen(port, () => {
 
 // Citation for call to OpenAI API
 // Date: 4/27/2025
-// Copied from: https://platform.openai.com/docs/overview
-// call API
-// const completion = await openai.chat.completions.create({
-//   model: 'gpt-4o',
-//   messages: [
-//     { role: 'developer', content: 'Talk like a pirate.' },
-//     { role: 'user', content: 'Are semicolons optional in JavaScript?' },
-//   ],
-// });
-// console.log(completion.choices[0].message.content);
+// Adapted from: https://www.npmjs.com/package/openai#:~:text=openai/openai%27%3B-,Usage,-The%20full%20API
