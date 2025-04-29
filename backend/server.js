@@ -13,10 +13,6 @@ const openai = new OpenAI({
 });
 
 // express routes
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-});
-
 app.post('/story', async (req, res) => { 
   const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
 
