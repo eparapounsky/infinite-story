@@ -1,9 +1,9 @@
 // load environment variables
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 // import APIs
-import express from 'express';
-import OpenAI from 'openai';
+import express from "express";
+import OpenAI from "openai";
 // create app
 const app = express();
 const port = 5000;
@@ -15,12 +15,12 @@ const openai = new OpenAI({
 });
 
 // express routes
-app.post('/story', async (req, res) => { 
+app.post("/story", async (req, res) => {
   const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
 
   // validation for prompt
   if (prompt.trim() === "") {
-    res.status(400).json({error:'Prompt is empty.'});
+    res.status(400).json({ error: "Prompt is empty." });
     return;
   }
 
@@ -28,23 +28,23 @@ app.post('/story', async (req, res) => {
     // send prompt to openai
     // API reference: https://platform.openai.com/docs/api-reference/chat/create?lang=node.js
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o', // model can be changed; available models- https://platform.openai.com/docs/models
+      model: "gpt-4o", // model can be changed; available models- https://platform.openai.com/docs/models
       messages: [
-        { role: 'system', content: 'You are an imaginative storyteller.' }, // high level instructions
-        { role: 'user', content: prompt }, // prompt from user
-        // maintaining context between prompts? 
+        { role: "system", content: "You are an imaginative storyteller." }, // high level instructions
+        { role: "user", content: prompt }, // prompt from user
+        // maintaining context between prompts?
       ],
-      max_completion_tokens: 300, // length of story 
+      max_completion_tokens: 300, // length of story
     });
 
     // receive story response from openai
     const response = completion.choices[0].message.content;
 
     // send story to frontend
-    res.json({story: response}); // use "story" as key in frontend
+    res.json({ story: response }); // use "story" as key in frontend
   } catch (error) {
-    console.error('Error occurred creating story: ', error);
-    res.status(500).json({error:'Error occurred creating story.'});
+    console.error("Error occurred creating story: ", error);
+    res.status(500).json({ error: "Error occurred creating story." });
   }
 });
 
