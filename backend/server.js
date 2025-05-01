@@ -4,9 +4,11 @@ dotenv.config();
 // import APIs
 import express from "express";
 import OpenAI from "openai";
+import cors from "cors";
 // create app
 const app = express();
 const port = 5000;
+app.use(cors());
 app.use(express.json());
 
 // initialize openai client
