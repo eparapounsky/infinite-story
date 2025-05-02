@@ -70,7 +70,12 @@ function App() {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ prompt }), // can add genre/tone/theme later
+              body: JSON.stringify({
+                prompt,
+                genre,
+                tone,
+                theme
+              }), 
             });
 
             const data = await response.json();
