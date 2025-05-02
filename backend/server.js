@@ -28,12 +28,15 @@ app.post("/story", async (req, res) => {
 
   try {
     // build a styled prompt using genre, tone, and theme
-    const styledPrompt = [
-      tone  ? `a ${tone}`  : "an entertaining",
-      genre ? `${genre} story` : "story",
-      `about "${prompt.trim()}"`,
-      theme ? `with a theme of ${theme}` : ""
-    ].filter(Boolean).join(" ") + ".";
+    const styledPrompt =
+      [
+        tone ? `a ${tone}` : "an entertaining",
+        genre ? `${genre} story` : "story",
+        `about "${prompt.trim()}"`,
+        theme ? `with a theme of ${theme}` : "",
+      ]
+        .filter(Boolean)
+        .join(" ") + ".";
 
     // send prompt to openai
     // API reference: https://platform.openai.com/docs/api-reference/chat/create?lang=node.js
