@@ -4,9 +4,11 @@ dotenv.config();
 // import APIs
 import express from "express";
 import OpenAI from "openai";
+import cors from "cors";
 // create app
 const app = express();
 const port = 5000;
+app.use(cors());
 app.use(express.json());
 
 // initialize openai client
@@ -16,22 +18,30 @@ const openai = new OpenAI({
 
 // express routes
 app.post("/story", async (req, res) => {
-  const prompt = req.body.prompt; // extract user prompt; use "prompt" as key in frontend
+  const { prompt, genre, tone, theme } = req.body;
 
   // validation for prompt
-  if (prompt.trim() === "") {
+  if (!prompt || prompt.trim() === "") {
     res.status(400).json({ error: "Prompt is empty." });
     return;
   }
 
   try {
+    // build a styled prompt using genre, tone, and theme
+    const styledPrompt = [
+      tone  ? `a ${tone}`  : "an entertaining",
+      genre ? `${genre} story` : "story",
+      `about "${prompt.trim()}"`,
+      theme ? `with a theme of ${theme}` : ""
+    ].filter(Boolean).join(" ") + ".";
+
     // send prompt to openai
     // API reference: https://platform.openai.com/docs/api-reference/chat/create?lang=node.js
     const completion = await openai.chat.completions.create({
       model: "gpt-4o", // model can be changed; available models- https://platform.openai.com/docs/models
       messages: [
         { role: "system", content: "You are an imaginative storyteller." }, // high level instructions
-        { role: "user", content: prompt }, // prompt from user
+        { role: "user", content: styledPrompt }, // prompt from user
         // maintaining context between prompts?
       ],
       max_completion_tokens: 300, // length of story
