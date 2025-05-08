@@ -38,6 +38,12 @@ textarea {
   resize: vertical;
 }
 
+.story {
+  text-align: left;
+  width: 60%;
+  margin-left: 20%;
+}
+
 .buttons {
   display: flex;
   justify-content: center;
