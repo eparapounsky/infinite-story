@@ -16,6 +16,11 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// initialize conversation history
+let history = [
+  { role: "system", content: "You are an imaginative storyteller." }, // high level instructions
+];
+
 // express routes
 app.post("/story", async (req, res) => {
   const { prompt, genre, tone, theme } = req.body;
@@ -38,15 +43,17 @@ app.post("/story", async (req, res) => {
         .filter(Boolean)
         .join(" ") + ".";
 
+    history.push({ role: "user", content: styledPrompt }); // add user prompt to history
+
     // send prompt to openai
     // API reference: https://platform.openai.com/docs/api-reference/chat/create?lang=node.js
     const completion = await openai.chat.completions.create({
       model: "gpt-4o", // model can be changed; available models- https://platform.openai.com/docs/models
-      messages: [
-        { role: "system", content: "You are an imaginative storyteller." }, // high level instructions
-        { role: "user", content: styledPrompt }, // prompt from user
-        // maintaining context between prompts?
-      ],
+      messages: history,
+      // [
+      //   { role: "system", content: "You are an imaginative storyteller." }, // high level instructions
+      //   { role: "user", content: styledPrompt }, // prompt from user
+      // ]
       max_completion_tokens: 300, // length of story
     });
 
@@ -77,3 +84,7 @@ app.listen(port, () => {
 // Citation for call to OpenAI API
 // Date: 4/27/2025
 // Adapted from: https://www.npmjs.com/package/openai#:~:text=openai/openai%27%3B-,Usage,-The%20full%20API
+
+// Citation for context management
+// Date: 5/8/2025
+// Adapted from: https://platform.openai.com/docs/guides/conversation-state?api-mode=responses
