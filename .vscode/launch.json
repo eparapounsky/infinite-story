@@ -7,13 +7,20 @@
 
         {
             "type": "node",
-            "request": "launch",
+            "request": "attach",
             "name": "Launch Program",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\backend\\server.js",
+            // "program": "${workspaceFolder}\\backend\\server.js",
             "envFile": "${workspaceFolder}/backend/.env"
-        }
+        }, 
+        {
+            "name": "Attach to Server",
+            "type": "node",
+            "request": "attach",
+            "processId": "${command:PickProcess}",
+            "cwd": "${workspaceFolder}/backend"
+          }
     ]
 }
