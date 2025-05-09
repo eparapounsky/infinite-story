@@ -86,6 +86,7 @@ app.post("/story", async (req, res) => {
       { image: image_response },
     ];
     res.json(story_and_image); // access story with data[0].story and image with data[1].image in frontend
+    // NOTE: image is returned as a url to the hosted image
   } catch (error) {
     console.error("Error occurred creating story: ", error);
     res.status(500).json({ error: "Error occurred creating story." });
