@@ -37,18 +37,19 @@ app.post("/story", async (req, res) => {
 
     if (history.length === 1) {
       styledPrompt =
-      [
-        tone ? `a ${tone}` : "an entertaining",
-        genre ? `${genre} story` : "story",
-        `about "${prompt.trim()}"`,
-        theme ? `with a theme of ${theme}` : "",
-      ]
-        .filter(Boolean)
-        .join(" ") + ".";
-    } else { // avoid continously giving intial prompts
-      styledPrompt = "continue the story"
+        [
+          tone ? `a ${tone}` : "an entertaining",
+          genre ? `${genre} story` : "story",
+          `about "${prompt.trim()}"`,
+          theme ? `with a theme of ${theme}` : "",
+        ]
+          .filter(Boolean)
+          .join(" ") + ".";
+    } else {
+      // avoid continously giving initial prompts
+      styledPrompt = "continue the story";
     }
-    
+
     history.push({ role: "user", content: styledPrompt }); // add user prompt to history
 
     // send prompt to openai
@@ -59,13 +60,25 @@ app.post("/story", async (req, res) => {
       max_completion_tokens: 300, // length of story
     });
 
+    // use prompt to generate image
+    const result = await openai.images.generate({
+      model: "dall-e-2",
+      prompt: styledPrompt,
+      size: "256x256",
+    });
+
     // receive story response from openai
-    const response = completion.choices[0].message.content;
+    const story_response = completion.choices[0].message.content;
+    // receive image response from openai
+    const image_response = result.data[0].url;
 
-    history.push(({role:"assistant", content: response})); // add GPT response to history
+    history.push({ role: "assistant", content: story_response }); // add GPT response to history
 
-    // send story to frontend
-    res.json({ story: response }); // use "story" as key in frontend
+    // send story and image to frontend
+    let story_and_image = [{ story: story_response }, {image: image_response}]
+    res.json(story_and_image)
+    // res.json({ story: story_response }); // use "story" and "image" as keys in frontend
+
   } catch (error) {
     console.error("Error occurred creating story: ", error);
     res.status(500).json({ error: "Error occurred creating story." });
@@ -92,3 +105,7 @@ app.listen(port, () => {
 // Citation for context management
 // Date: 5/8/2025
 // Adapted from: https://platform.openai.com/docs/guides/conversation-state?api-mode=responses
+
+// Citation for DALL-E image generation
+// Date: 5/9/2025
+// Adapted from: https://platform.openai.com/docs/guides/image-generation?image-generation-model=dall-e-2
