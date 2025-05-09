@@ -33,7 +33,10 @@ app.post("/story", async (req, res) => {
 
   try {
     // build a styled prompt using genre, tone, and theme
-    const styledPrompt =
+    let styledPrompt = "";
+
+    if (history.length === 1) {
+      styledPrompt =
       [
         tone ? `a ${tone}` : "an entertaining",
         genre ? `${genre} story` : "story",
@@ -42,7 +45,10 @@ app.post("/story", async (req, res) => {
       ]
         .filter(Boolean)
         .join(" ") + ".";
-
+    } else { // avoid continously giving intial prompts
+      styledPrompt = "continue the story"
+    }
+    
     history.push({ role: "user", content: styledPrompt }); // add user prompt to history
 
     // send prompt to openai
@@ -50,15 +56,13 @@ app.post("/story", async (req, res) => {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o", // model can be changed; available models- https://platform.openai.com/docs/models
       messages: history,
-      // [
-      //   { role: "system", content: "You are an imaginative storyteller." }, // high level instructions
-      //   { role: "user", content: styledPrompt }, // prompt from user
-      // ]
       max_completion_tokens: 300, // length of story
     });
 
     // receive story response from openai
     const response = completion.choices[0].message.content;
+
+    history.push(({role:"assistant", content: response})); // add GPT response to history
 
     // send story to frontend
     res.json({ story: response }); // use "story" as key in frontend
