@@ -64,21 +64,28 @@ app.post("/story", async (req, res) => {
     const result = await openai.images.generate({
       model: "dall-e-2",
       prompt: styledPrompt,
-      size: "256x256",
+      size: "256x256", // $0.016 per image
     });
 
-    // receive story response from openai
-    const story_response = completion.choices[0].message.content;
-    // receive image response from openai
-    const image_response = result.data[0].url;
+    // use DALLE 3 for higher quality & more realistic images; cost $0.04 per image
+    // pricing: https://platform.openai.com/docs/pricing#image-generation
+    // const result = await openai.images.generate({
+    //   model: "dall-e-3",
+    //   prompt: styledPrompt,
+    //   size: "1024x1024",
+    // });
+
+    const story_response = completion.choices[0].message.content; // receive story response from openai
+    const image_response = result.data[0].url; // receive image response from openai
 
     history.push({ role: "assistant", content: story_response }); // add GPT response to history
 
     // send story and image to frontend
-    let story_and_image = [{ story: story_response }, {image: image_response}]
-    res.json(story_and_image)
-    // res.json({ story: story_response }); // use "story" and "image" as keys in frontend
-
+    let story_and_image = [
+      { story: story_response },
+      { image: image_response },
+    ];
+    res.json(story_and_image); // access story with data[0].story and image with data[1].image in frontend
   } catch (error) {
     console.error("Error occurred creating story: ", error);
     res.status(500).json({ error: "Error occurred creating story." });
