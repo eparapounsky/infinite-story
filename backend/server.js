@@ -61,19 +61,13 @@ app.post("/story", async (req, res) => {
     });
 
     // use prompt to generate image
-    const result = await openai.images.generate({
-      model: "dall-e-2",
-      prompt: styledPrompt,
-      size: "256x256", // $0.016 per image
-    });
-
-    // use DALLE 3 for higher quality & more realistic images; cost $0.04 per image
+    // using DALLE 3 for higher quality & more realistic images (DALL E 2 unreliable); cost $0.04 per image
     // pricing: https://platform.openai.com/docs/pricing#image-generation
-    // const result = await openai.images.generate({
-    //   model: "dall-e-3",
-    //   prompt: styledPrompt,
-    //   size: "1024x1024",
-    // });
+    const result = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: styledPrompt,
+      size: "1024x1024",
+    });
 
     const story_response = completion.choices[0].message.content; // receive story response from openai
     const image_response = result.data[0].url; // receive image response from openai
@@ -116,4 +110,4 @@ app.listen(port, () => {
 
 // Citation for DALL-E image generation
 // Date: 5/9/2025
-// Adapted from: https://platform.openai.com/docs/guides/image-generation?image-generation-model=dall-e-2
+// Adapted from: https://platform.openai.com/docs/guides/image-generation?image-generation-model=dall-e-3
