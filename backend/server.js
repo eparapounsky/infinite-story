@@ -60,19 +60,19 @@ app.post("/story", async (req, res) => {
       max_completion_tokens: 300, // length of story
     });
 
-    // use prompt to generate image
-    // using DALLE 3 for higher quality & more realistic images (DALL E 2 unreliable); cost $0.04 per image
+    const story_response = completion.choices[0].message.content; // receive story response from openai
+    history.push({ role: "assistant", content: story_response }); // add GPT response to history
+
+    // use GPT's response to generate image
+    // using DALLE 3 for higher quality & more realistic images (DALLE 2 is unreliable); cost $0.04 per image
     // pricing: https://platform.openai.com/docs/pricing#image-generation
     const result = await openai.images.generate({
       model: "dall-e-3",
-      prompt: styledPrompt,
+      prompt: story_response,
       size: "1024x1024",
     });
 
-    const story_response = completion.choices[0].message.content; // receive story response from openai
     const image_response = result.data[0].url; // receive image response from openai
-
-    history.push({ role: "assistant", content: story_response }); // add GPT response to history
 
     // send story and image to frontend
     let story_and_image = [
