@@ -40,11 +40,20 @@ textarea {
   resize: vertical;
 }
 
+
 .image img {
   display: flex;
   justify-content: center;
   margin: auto;
   width: 45%;
+  border-radius: 5px;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease; /* smooth animation for hover */
+}
+
+/* enlarge image on hover to get a better look */
+.image img:hover {
+  transform: scale(1.5);
 }
 
 /* use rules only when story container is not empty */
@@ -52,7 +61,7 @@ textarea {
   display: flex;
   justify-content: center;
   margin: auto;
-  width: 70%;
+  width: 75%;
   text-align: left;
   margin-top: 15px;
   margin-bottom: 15px;
