@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap');
+
 .App {
   text-align: center;
 }
@@ -60,10 +62,15 @@ textarea {
   border-color: rgb(115, 115, 115);
   border-radius: 5px;
   border-width: 1px;
+  line-height: 1.5;
+  font-family: "Merienda", cursive;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 .ellipsis {
-  font-size: 1.4rem;
+  font-size: larger;
 }
 
 .buttons {
