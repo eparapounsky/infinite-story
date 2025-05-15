@@ -16,11 +16,25 @@
             "envFile": "${workspaceFolder}/backend/.env"
         }, 
         {
-            "name": "Attach to Server",
+            "name": "Attach to Server (port)",
             "type": "node",
             "request": "attach",
-            "processId": "${command:PickProcess}",
+            "port": 9229,
             "cwd": "${workspaceFolder}/backend"
-          }
-    ]
+          },
+          {
+            "name": "Launch Chrome Against localhost",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/frontend/src",
+            "sourceMaps": true
+        }
+    ], 
+    "compounds": [
+    {
+      "name": "Debug Full Stack",
+      "configurations": ["Attach to Server (port)", "Launch Chrome Against localhost"]
+    }
+  ]
 }
