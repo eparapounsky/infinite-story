@@ -129,8 +129,14 @@ function App() {
         </div>
       )}
 
-      <div className="story">
-        <p>{story}</p>
+      <div className="story" id="story">
+        {story && (
+          <p>
+            {story}
+            <span className="ellipsis"> …</span>
+          </p>
+        )}
+        
       </div>
 
       <textarea
