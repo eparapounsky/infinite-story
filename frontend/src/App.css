@@ -38,11 +38,20 @@ textarea {
   resize: vertical;
 }
 
+.image img {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  width: 45%;
+}
+
 .story {
   display: flex;
   justify-content: center;
   margin: auto;
   width: 70%;
+  text-align: left;
+  margin-bottom: 15px;
 }
 
 .buttons {
