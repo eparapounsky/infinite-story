@@ -15,7 +15,7 @@ function App() {
   const [lastPrompt, setLastPrompt] = useState(null);
   const [loading, setLoading] = useState(false); // loading state
 
-  // unified fetch logic for Continue and Regenerate
+  // fetch logic for Continue
   async function continueStory(payload) {
     setLoading(true); // start loading
     try {
@@ -41,8 +41,10 @@ function App() {
     }
   }
 
+  // fetch logic for Regenerate
   async function regenerateStory() {
-    const response = await fetch("http://localhost:5000/regenerate", {
+    try {
+      const response = await fetch("http://localhost:5000/regenerate", {
         method: "POST",
       });
 
@@ -56,8 +58,10 @@ function App() {
       // set new story and image
       setStory(storyObj.story);
       setImageUrl(imageObj.image);
+    } catch (error) {
+      console.error("Error regenerating story:", error);
+    }
   }
-
 
   // reset state to start a new story
   function resetStory() {
