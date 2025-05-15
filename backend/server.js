@@ -25,8 +25,7 @@ let history = [
 app.post("/regenerate", async (req, res) => {
   history.push({
     role: "user",
-    content:
-      "Try again",
+    content: "Try again",
   }); // add user prompt to history
 
   // send prompt to openai
@@ -78,7 +77,7 @@ app.post("/story", async (req, res) => {
           .join(" ") + ".";
     } else {
       // avoid continously giving initial prompts
-      styledPrompt = "continue the story";
+      styledPrompt = "Continue the story";
     }
 
     history.push({ role: "user", content: styledPrompt }); // add user prompt to history
