@@ -22,6 +22,37 @@ let history = [
 ];
 
 // express routes
+app.post("/regenerate", async (req, res) => {
+  history.push({
+    role: "user",
+    content:
+      "Try again",
+  }); // add user prompt to history
+
+  // send prompt to openai
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o", // model can be changed; available models- https://platform.openai.com/docs/models
+    messages: history,
+    max_completion_tokens: 300, // length of story
+  });
+
+  const story_response = completion.choices[0].message.content; // receive story response from openai
+  history.push({ role: "assistant", content: story_response }); // add GPT response to history
+
+  // use GPT's response to generate image
+  const result = await openai.images.generate({
+    model: "dall-e-3",
+    prompt: story_response,
+    size: "1024x1024",
+  });
+
+  const image_response = result.data[0].url; // receive image response from openai
+
+  // send story and image to frontend
+  let story_and_image = [{ story: story_response }, { image: image_response }];
+  res.json(story_and_image);
+});
+
 app.post("/story", async (req, res) => {
   const { prompt, genre, tone, theme } = req.body;
 
