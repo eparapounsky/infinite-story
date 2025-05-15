@@ -40,7 +40,6 @@ textarea {
   resize: vertical;
 }
 
-
 .image img {
   display: flex;
   justify-content: center;
@@ -48,7 +47,8 @@ textarea {
   width: 45%;
   border-radius: 5px;
   box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease; /* smooth animation for hover */
+  transition: transform 0.3s ease;
+  /* smooth animation for hover */
 }
 
 /* enlarge image on hover to get a better look */
