@@ -35,7 +35,7 @@ app.post("/story", async (req, res) => {
     // build a styled prompt using genre, tone, and theme
     let styledPrompt = "";
 
-    if (history.length < 2) {
+    if (history.length === 1) {
       styledPrompt =
         [
           tone ? `a ${tone}` : "an entertaining",
@@ -122,7 +122,7 @@ app.post("/regenerate", async (req, res) => {
 
 // ------------------- endpoint for erasing story history -------------------
 app.post("/new", async (req, res) => {
-  history = [];
+  history = [{ role: "system", content: "You are an imaginative storyteller." }];
 });
 
 // start the server
