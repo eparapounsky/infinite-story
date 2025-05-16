@@ -126,7 +126,7 @@ function App() {
       {/* loading indicator */}
       {loading && (
         <div className="loading">
-          <p>Generating story & image…</p>
+          {/* <p>Generating story & image…</p> */}
         </div>
       )}
 
