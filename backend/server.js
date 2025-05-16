@@ -66,7 +66,7 @@ app.post("/story", async (req, res) => {
     // use GPT's response to generate image
     const result = await openai.images.generate({
       model: "dall-e-3",
-      prompt: "Do not depict any words or letters.".concat(story_response),
+      prompt: story_response,
       size: "1024x1024",
     });
 
@@ -108,7 +108,7 @@ app.post("/regenerate", async (req, res) => {
     // use GPT's response to generate image
     const result = await openai.images.generate({
       model: "dall-e-3",
-      prompt: "Do not depict any words or letters.".concat(story_response),
+      prompt: story_response,
       size: "1024x1024",
     });
 
