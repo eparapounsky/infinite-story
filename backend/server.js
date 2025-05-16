@@ -122,7 +122,9 @@ app.post("/regenerate", async (req, res) => {
 
 // ------------------- endpoint for erasing story history -------------------
 app.post("/new", async (req, res) => {
-  history = [{ role: "system", content: "You are an imaginative storyteller." }];
+  history = [
+    { role: "system", content: "You are an imaginative storyteller." },
+  ];
 });
 
 // start the server
