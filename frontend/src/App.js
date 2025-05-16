@@ -64,12 +64,20 @@ function App() {
   }
 
   // reset state to start a new story
-  function resetStory() {
-    setStory("");
-    setImageUrl("");
-    setHistoryStack([]);
-    setPrompt("");
-    setLastPrompt(null);
+  async function resetStory() {
+    try {
+      setStory("");
+      setImageUrl("");
+      setHistoryStack([]);
+      setPrompt("");
+      setLastPrompt(null);
+
+      const response = await fetch("http://localhost:5000/new", {
+        method: "POST",
+      });
+    } catch (error) {
+      console.error("Error starting new story:", error);
+    }
   }
 
   return (
