@@ -45,8 +45,10 @@ textarea {
   justify-content: center;
   margin: auto;
   width: 45%;
+  border-style: solid;
+  border-width: 10px;
   border-radius: 5px;
-  box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 5px 5px rgb(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   /* smooth animation for hover */
 }
