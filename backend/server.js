@@ -8,17 +8,18 @@ import cors from "cors";
 // create app
 const app = express();
 const port = 5000;
+// set up middleware
 app.use(cors());
 app.use(express.json());
 
-// initialize openai client
+// initialize OpenAI client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// initialize conversation history
+// initialize conversation history with high level instructions
 let history = [
-  { role: "system", content: "You are an imaginative storyteller." }, // high level instructions
+  { role: "system", content: "You are an imaginative storyteller." },
 ];
 
 // ------------------- endpoint where story creation begins + continues -------------------
@@ -34,7 +35,6 @@ app.post("/story", async (req, res) => {
   try {
     // build a styled prompt using genre, tone, and theme
     let styledPrompt = "";
-
     if (history.length === 1) {
       styledPrompt =
         [
@@ -46,42 +46,39 @@ app.post("/story", async (req, res) => {
           .filter(Boolean)
           .join(" ") + ".";
     } else {
-      // avoid continously giving initial prompts
-      styledPrompt = "Continue the story";
+      styledPrompt = "Continue the story"; // avoid continously giving initial prompts
     }
 
-    history.push({ role: "user", content: styledPrompt }); // add user prompt to history
+    // add user prompt to history
+    history.push({ role: "user", content: styledPrompt });
 
     // send prompt to openai
-    // API reference: https://platform.openai.com/docs/api-reference/chat/create?lang=node.js
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o", // model can be changed; available models- https://platform.openai.com/docs/models
+      model: "gpt-4o",
       messages: history,
       max_completion_tokens: 300, // length of story
     });
 
-    const story_response = completion.choices[0].message.content; // receive story response from openai
-    history.push({ role: "assistant", content: story_response }); // add GPT response to history
+    // receive story response from openai + add GPT response to history
+    const story_response = completion.choices[0].message.content;
+    history.push({ role: "assistant", content: story_response });
 
     // use GPT's response to generate image
-    // using DALLE 3 for higher quality & more realistic images (DALLE 2 is unreliable); cost $0.04 per image
-    // pricing: https://platform.openai.com/docs/pricing#image-generation
     const result = await openai.images.generate({
       model: "dall-e-3",
-      // prompt: story_response.concat("Do not depict any words or letters."),
       prompt: "Do not depict any words or letters.".concat(story_response),
       size: "1024x1024",
     });
 
-    const image_response = result.data[0].url; // receive image response from openai
+    // receive image response from openai
+    const image_response = result.data[0].url;
 
     // send story and image to frontend
     let story_and_image = [
       { story: story_response },
       { image: image_response },
     ];
-    res.json(story_and_image); // access story with data[0].story and image with data[1].image in frontend
-    // NOTE: image is returned as a url to the hosted image
+    res.json(story_and_image);
   } catch (error) {
     console.error("Error occurred creating story: ", error);
     res.status(500).json({ error: "Error occurred creating story." });
@@ -90,44 +87,60 @@ app.post("/story", async (req, res) => {
 
 // ------------------- endpoint to regenerate story chunk -------------------
 app.post("/regenerate", async (req, res) => {
-  history.push({
-    role: "user",
-    content: "Try again",
-  }); // add user prompt to history
+  try {
+    // add message to history asking GPT to try again
+    history.push({
+      role: "user",
+      content: "Try again",
+    });
 
-  // send prompt to openai
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o", // model can be changed; available models- https://platform.openai.com/docs/models
-    messages: history,
-    max_completion_tokens: 300, // length of story
-  });
+    // send prompt to openai
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: history,
+      max_completion_tokens: 300, // length of story
+    });
 
-  const story_response = completion.choices[0].message.content; // receive story response from openai
-  history.push({ role: "assistant", content: story_response }); // add GPT response to history
+    // receive story response from openai + add GPT response to history
+    const story_response = completion.choices[0].message.content;
+    history.push({ role: "assistant", content: story_response });
 
-  // use GPT's response to generate image
-  const result = await openai.images.generate({
-    model: "dall-e-3",
-    // prompt: story_response.concat("Do not depict any words or letters."),
-    prompt: "Do not depict any words or letters.".concat(story_response),
-    size: "1024x1024",
-  });
+    // use GPT's response to generate image
+    const result = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: "Do not depict any words or letters.".concat(story_response),
+      size: "1024x1024",
+    });
 
-  const image_response = result.data[0].url; // receive image response from openai
+    // receive image response from openai
+    const image_response = result.data[0].url;
 
-  // send story and image to frontend
-  let story_and_image = [{ story: story_response }, { image: image_response }];
-  res.json(story_and_image);
+    // send story and image to frontend
+    let story_and_image = [
+      { story: story_response },
+      { image: image_response },
+    ];
+    res.json(story_and_image);
+  } catch (error) {
+    console.error("Error occurred regenerating story: ", error);
+    res.status(500).json({ error: "Error occurred regenerating story." });
+  }
 });
 
-// ------------------- endpoint for erasing story history -------------------
+// ------------------- endpoint for resetting story history -------------------
 app.post("/new", async (req, res) => {
-  history = [
-    { role: "system", content: "You are an imaginative storyteller." },
-  ];
+  try {
+    // replace all history with high level instructions
+    history = [
+      { role: "system", content: "You are an imaginative storyteller." },
+    ];
+  } catch (error) {
+    console.error("Error occurred resetting story: ", error);
+    res.status(500).json({ error: "Error occurred resetting story." });
+  }
 });
 
-// start the server
+// ------------------- start the server -------------------
 app.listen(port, () => {
   console.log(`App  listening on port ${port}`);
 });
@@ -143,6 +156,7 @@ app.listen(port, () => {
 // Citation for call to OpenAI API
 // Date: 4/27/2025
 // Adapted from: https://www.npmjs.com/package/openai#:~:text=openai/openai%27%3B-,Usage,-The%20full%20API
+// List of available models: https://platform.openai.com/docs/models
 
 // Citation for context management
 // Date: 5/8/2025
@@ -151,3 +165,5 @@ app.listen(port, () => {
 // Citation for DALL-E image generation
 // Date: 5/9/2025
 // Adapted from: https://platform.openai.com/docs/guides/image-generation?image-generation-model=dall-e-3
+// using DALLE 3 for higher quality & more realistic images (DALLE 2 is unreliable); cost $0.04 per image
+// pricing: https://platform.openai.com/docs/pricing#image-generation
