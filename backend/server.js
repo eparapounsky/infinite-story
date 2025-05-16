@@ -22,7 +22,7 @@ let history = [
   { role: "system", content: "You are an imaginative storyteller." },
 ];
 
-// ------------------- endpoint where story creation begins + continues -------------------
+// ------------------- endpoint to begin + continue story -------------------
 app.post("/story", async (req, res) => {
   const { prompt, genre, tone, theme } = req.body;
 
@@ -127,7 +127,7 @@ app.post("/regenerate", async (req, res) => {
   }
 });
 
-// ------------------- endpoint for resetting story history -------------------
+// ------------------- endpoint to reset story history -------------------
 app.post("/new", async (req, res) => {
   try {
     // replace all history with high level instructions
