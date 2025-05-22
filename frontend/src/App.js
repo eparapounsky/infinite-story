@@ -192,7 +192,7 @@ function App() {
             setLastPrompt(payload);
             continueStory(payload);
           }}
-          disabled={loading}
+          disabled={loading || prompt.trim() === ""}
         >
           Continue <IoMdArrowForward />
         </button>
