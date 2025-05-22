@@ -15,7 +15,7 @@ function App() {
   const [lastPrompt, setLastPrompt] = useState(null);
   const [loading, setLoading] = useState(false); // loading state
 
-  // fetch logic for Continue
+  // Continue handler
   async function continueStory(payload) {
     setLoading(true); // start loading
     try {
@@ -28,8 +28,11 @@ function App() {
       // unpack the [ { story }, { image } ] response array
       const [storyObj, imageObj] = data;
 
-      // push previous state onto undo stack
-      setHistoryStack((stack) => [...stack, { story, imageUrl }]);
+      // only push if there's something to go back to
+      if (story && imageUrl) {
+        // include the prompt that generated this chunk
+        setHistoryStack(stack => [...stack, { story, imageUrl, prompt: lastPrompt }]);
+      }
 
       // set new story and image
       setStory(storyObj.story);
@@ -41,42 +44,71 @@ function App() {
     }
   }
 
-  // fetch logic for Regenerate
+  // Regenerate handler
   async function regenerateStory() {
+    if (!lastPrompt || loading) return;
+    setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/regenerate", {
-        method: "POST",
-      });
+      // 1) Instruct server to drop the current chunk
+      await fetch("http://localhost:5000/undo", { method: "POST" });
 
+      // 2) Re-POST the exact same payload to /story
+      const response = await fetch("http://localhost:5000/story", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(lastPrompt),
+      });
       const data = await response.json();
-      // unpack the [ { story }, { image } ] response array
       const [storyObj, imageObj] = data;
 
-      // push previous state onto undo stack
-      setHistoryStack((stack) => [...stack, { story, imageUrl }]);
-
-      // set new story and image
+      // 3) Update UI with regenerated chunk
       setStory(storyObj.story);
       setImageUrl(imageObj.image);
     } catch (error) {
       console.error("Error regenerating story:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
-  // reset state to start a new story
+  // Undo handler
+  async function handleUndo() {
+    if (historyStack.length === 0 || loading) return;
+    setLoading(true);
+    try {
+      const prevEntry = historyStack[historyStack.length - 1];
+      setHistoryStack(stack => stack.slice(0, -1));
+      setStory(prevEntry.story);
+      setImageUrl(prevEntry.imageUrl);
+      setLastPrompt(prevEntry.prompt);
+
+      await fetch("http://localhost:5000/undo", { method: "POST" });
+    } catch (error) {
+      console.error("Error undoing on server:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // New Story handler
   async function resetStory() {
     try {
+      // tell server to wipe its history first
+      await fetch("http://localhost:5000/new", { method: "POST" });
+
+      // only after server confirms, clear all client state
+      setGenre("");
+      setTone("");
+      setTheme("");
       setStory("");
       setImageUrl("");
       setHistoryStack([]);
       setPrompt("");
       setLastPrompt(null);
-
-      const response = await fetch("http://localhost:5000/new", {
-        method: "POST",
-      });
     } catch (error) {
       console.error("Error starting new story:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -160,33 +192,19 @@ function App() {
             setLastPrompt(payload);
             continueStory(payload);
           }}
+          disabled={loading}
         >
           Continue <IoMdArrowForward />
         </button>
 
         {/* undo button pops last state from history */}
-        <button
-          onClick={() => {
-            setHistoryStack((stack) => {
-              if (stack.length === 0) return stack;
-              const prev = stack[stack.length - 1];
-              setStory(prev.story);
-              setImageUrl(prev.imageUrl);
-              return stack.slice(0, -1);
-            });
-          }}
-        >
-          Undo <BiUndo />
+        <button onClick={handleUndo} disabled={loading || historyStack.length === 0}>
+          Undo <BiUndo/>
         </button>
 
         {/* regenerate button reuses lastPrompt */}
-        <button
-          onClick={() => {
-            // if (lastPrompt) regenerateStory(lastPrompt);
-            regenerateStory();
-          }}
-        >
-          Regenerate <AiOutlineRedo />
+        <button onClick={regenerateStory} disabled={loading||!lastPrompt}>
+          Regenerate <AiOutlineRedo/>
         </button>
       </div>
 
