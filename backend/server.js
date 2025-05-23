@@ -19,7 +19,9 @@ const openai = new OpenAI({
 
 // initialize conversation history with high level instructions
 let history = [
-  { role: "system", content: "You are an imaginative storyteller." },
+  { role: "system", content: "You are an imaginative storyteller. You always remember everything that came before " +
+                              "and never apologize or mention missing context; just continue the story seamlessly."
+   },
 ];
 
 // ------------------- endpoint to begin + continue story -------------------
@@ -42,12 +44,16 @@ app.post("/story", async (req, res) => {
           genre ? `${genre} story` : "story",
           `about "${prompt.trim()}"`,
           theme ? `with a theme of ${theme}` : "",
+          "Please write under 200 words in complete sentences, carrying the plot forward smoothly and finishing every sentence without cutting off mid-thought."
         ]
           .filter(Boolean)
           .join(" ") + ".";
     } else {
-      styledPrompt = "Continue the story"; // avoid continously giving initial prompts
-    }
+      // subsequent chunks: incorporate whatever the user typed into the continuation cue
+      styledPrompt =
+      `Please continue the story about "${prompt.trim()}" ` +
+      `under 200 words in complete sentences, carrying the plot forward smoothly and finishing every sentence without cutting off mid-thought.`
+    };
 
     // add user prompt to history
     history.push({ role: "user", content: styledPrompt });
@@ -57,6 +63,7 @@ app.post("/story", async (req, res) => {
       model: "gpt-4o",
       messages: history,
       max_completion_tokens: 300, // length of story
+      stop: ["<<END>>"],
     });
 
     // receive story response from openai + add GPT response to history
@@ -85,55 +92,38 @@ app.post("/story", async (req, res) => {
   }
 });
 
-// ------------------- endpoint to regenerate story chunk -------------------
-app.post("/regenerate", async (req, res) => {
+// ------------------- endpoint to undo last turn -------------------
+app.post("/undo", (req, res) => {
   try {
-    // add message to history asking GPT to try again
-    history.push({
-      role: "user",
-      content: "Try again",
-    });
-
-    // send prompt to openai
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: history,
-      max_completion_tokens: 300, // length of story
-    });
-
-    // receive story response from openai + add GPT response to history
-    const story_response = completion.choices[0].message.content;
-    history.push({ role: "assistant", content: story_response });
-
-    // use GPT's response to generate image
-    const result = await openai.images.generate({
-      model: "dall-e-3",
-      prompt: story_response,
-      size: "1024x1024",
-    });
-
-    // receive image response from openai
-    const image_response = result.data[0].url;
-
-    // send story and image to frontend
-    let story_and_image = [
-      { story: story_response },
-      { image: image_response },
-    ];
-    res.json(story_and_image);
-  } catch (error) {
-    console.error("Error occurred regenerating story: ", error);
-    res.status(500).json({ error: "Error occurred regenerating story." });
+    // Remove the last assistant message and its corresponding user prompt
+    let removed = 0;
+    for (let i = history.length - 1; i >= 0 && removed < 2; i--) {
+      if (history[i].role !== "system") {
+        history.splice(i, 1);
+        removed++;
+      }
+    }
+    return res.sendStatus(200);
+  } catch (err) {
+    console.error("Error in /undo:", err);
+    return res.status(500).json({ error: "Undo failed." });
   }
 });
 
 // ------------------- endpoint to reset story history -------------------
 app.post("/new", async (req, res) => {
   try {
-    // replace all history with high level instructions
+    // wipe the entire conversation context
     history = [
-      { role: "system", content: "You are an imaginative storyteller." },
+      {
+        role: "system",
+        content: "You are an imaginative storyteller. You always remember everything that came before " +
+                  "and never apologize or mention missing context; just continue the story seamlessly."
+      }
     ];
+
+    // acknowledge success so client can safely clear its UI
+    res.sendStatus(200);
   } catch (error) {
     console.error("Error occurred resetting story: ", error);
     res.status(500).json({ error: "Error occurred resetting story." });
