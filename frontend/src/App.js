@@ -31,7 +31,10 @@ function App() {
       // only push if there's something to go back to
       if (story && imageUrl) {
         // include the prompt that generated this chunk
-        setHistoryStack(stack => [...stack, { story, imageUrl, prompt: lastPrompt }]);
+        setHistoryStack((stack) => [
+          ...stack,
+          { story, imageUrl, prompt: lastPrompt },
+        ]);
       }
 
       // set new story and image
@@ -77,7 +80,7 @@ function App() {
     setLoading(true);
     try {
       const prevEntry = historyStack[historyStack.length - 1];
-      setHistoryStack(stack => stack.slice(0, -1));
+      setHistoryStack((stack) => stack.slice(0, -1));
       setStory(prevEntry.story);
       setImageUrl(prevEntry.imageUrl);
       setLastPrompt(prevEntry.prompt);
@@ -157,9 +160,7 @@ function App() {
 
       {/* loading indicator */}
       {loading && (
-        <div className="loading">
-          {/* <p>Generating story & image…</p> */}
-        </div>
+        <div className="loading">{/* <p>Generating story & image…</p> */}</div>
       )}
 
       {/* display generated image if available */}
@@ -198,13 +199,16 @@ function App() {
         </button>
 
         {/* undo button pops last state from history */}
-        <button onClick={handleUndo} disabled={loading || historyStack.length === 0}>
-          Undo <BiUndo/>
+        <button
+          onClick={handleUndo}
+          disabled={loading || historyStack.length === 0}
+        >
+          Undo <BiUndo />
         </button>
 
         {/* regenerate button reuses lastPrompt */}
-        <button onClick={regenerateStory} disabled={loading||!lastPrompt}>
-          Regenerate <AiOutlineRedo/>
+        <button onClick={regenerateStory} disabled={loading || !lastPrompt}>
+          Regenerate <AiOutlineRedo />
         </button>
       </div>
 

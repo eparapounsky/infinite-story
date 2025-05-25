@@ -19,9 +19,12 @@ const openai = new OpenAI({
 
 // initialize conversation history with high level instructions
 let history = [
-  { role: "system", content: "You are an imaginative storyteller. You always remember everything that came before " +
-                              "and never apologize or mention missing context; just continue the story seamlessly."
-   },
+  {
+    role: "system",
+    content:
+      "You are an imaginative storyteller. You always remember everything that came before " +
+      "and never apologize or mention missing context; just continue the story seamlessly.",
+  },
 ];
 
 // ------------------- endpoint to begin + continue story -------------------
@@ -44,21 +47,21 @@ app.post("/story", async (req, res) => {
           genre ? `${genre} story` : "story",
           `about "${prompt.trim()}"`,
           theme ? `with a theme of ${theme}` : "",
-          "Please write under 200 words in complete sentences, carrying the plot forward smoothly and finishing every sentence without cutting off mid-thought."
+          "Please write under 200 words in complete sentences, carrying the plot forward smoothly and finishing every sentence without cutting off mid-thought.",
         ]
           .filter(Boolean)
           .join(" ") + ".";
     } else {
       // subsequent chunks: incorporate whatever the user typed into the continuation cue
       styledPrompt =
-      `Please continue the story about "${prompt.trim()}" ` +
-      `under 200 words in complete sentences, carrying the plot forward smoothly and finishing every sentence without cutting off mid-thought.`
-    };
+        `Please continue the story about "${prompt.trim()}" ` +
+        `under 200 words in complete sentences, carrying the plot forward smoothly and finishing every sentence without cutting off mid-thought.`;
+    }
 
     // add user prompt to history
     history.push({ role: "user", content: styledPrompt });
 
-    // send prompt to openai
+    // send prompt to OpenAI
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: history,
@@ -66,7 +69,7 @@ app.post("/story", async (req, res) => {
       stop: ["<<END>>"],
     });
 
-    // receive story response from openai + add GPT response to history
+    // receive story response from OpenAI + add GPT response to history
     const story_response = completion.choices[0].message.content;
     history.push({ role: "assistant", content: story_response });
 
@@ -77,7 +80,7 @@ app.post("/story", async (req, res) => {
       size: "1024x1024",
     });
 
-    // receive image response from openai
+    // receive image response from OpenAI
     const image_response = result.data[0].url;
 
     // send story and image to frontend
@@ -104,8 +107,8 @@ app.post("/undo", (req, res) => {
       }
     }
     return res.sendStatus(200);
-  } catch (err) {
-    console.error("Error in /undo:", err);
+  } catch (error) {
+    console.error("Error in /undo:", error);
     return res.status(500).json({ error: "Undo failed." });
   }
 });
@@ -117,9 +120,10 @@ app.post("/new", async (req, res) => {
     history = [
       {
         role: "system",
-        content: "You are an imaginative storyteller. You always remember everything that came before " +
-                  "and never apologize or mention missing context; just continue the story seamlessly."
-      }
+        content:
+          "You are an imaginative storyteller. You always remember everything that came before " +
+          "and never apologize or mention missing context; just continue the story seamlessly.",
+      },
     ];
 
     // acknowledge success so client can safely clear its UI
