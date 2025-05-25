@@ -29,8 +29,9 @@
 }
 
 .dropdowns select {
-  padding: 3px;
+  padding: 5px;
   border-radius: 20px;
+  font-size: 15px;
 }
 
 .loading {
@@ -57,17 +58,19 @@
 
 textarea {
   width: 45%;
-  height: 50px;
+  min-height: 4em;
+  height: auto;
+  padding: 0.8rem 1rem;
+  box-sizing: border-box;
   border-radius: 20px;
-  text-indent: 0.5rem;
-  line-height: 3.5;
+  font-size: 15px;
+  overflow: auto;
   /* remove resize element */
   resize: none;
 }
 
-textarea::placeholder {
-  text-indent: 0.5rem;
-  line-height: 3.5;
+textarea::-webkit-scrollbar {
+  display: none;
 }
 
 textarea::selection {
