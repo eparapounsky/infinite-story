@@ -59,9 +59,19 @@ textarea {
   width: 45%;
   height: 50px;
   border-radius: 20px;
-  resize: vertical;
+  text-indent: 0.5rem;
+  line-height: 3.5;
   /* remove resize element */
   resize: none;
+}
+
+textarea::placeholder {
+  text-indent: 0.5rem;
+  line-height: 3.5;
+}
+
+textarea::selection {
+  background: rgba(115, 115, 115, 0.3);
 }
 
 .image img {
