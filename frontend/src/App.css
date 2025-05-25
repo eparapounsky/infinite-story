@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap");
 
 .App {
   text-align: center;
@@ -12,13 +12,13 @@
 }
 
 #new-story {
-  padding: 7px;
-  margin-left: 10px;
+  /* padding: 7px; */
+  margin-left: 20px;
   margin-top: 10px;
-  border-radius: 5px;
-  border-width: 1px;
-  background-color: green;
-  color: white;
+  /* border-radius: 5px; */
+  /* border-width: 1px; */
+  /* background-color: green;
+  color: white; */
 }
 
 .dropdowns {
@@ -36,7 +36,7 @@
 .loading {
   width: 48px;
   height: 48px;
-  border: 5px solid #FFF;
+  border: 5px solid #fff;
   border-bottom-color: #2c56ff;
   border-radius: 50%;
   display: inline-block;
@@ -54,7 +54,6 @@
     transform: rotate(360deg);
   }
 }
-
 
 textarea {
   width: 45%;
@@ -114,6 +113,38 @@ textarea {
   margin-top: 20px;
 }
 
+/* -------------------------------------- */
+button {
+  padding: 12px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 0;
+  background-color: white;
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 15px;
+  color: black;
+  transition: all 0.5s ease;
+}
+
+button:hover {
+  letter-spacing: 3px;
+  background-color: hsl(261deg 80% 48%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+}
+
+button:active {
+  letter-spacing: 3px;
+  background-color: hsl(261deg 80% 48%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+  transform: translateY(10px);
+  transition: 100ms;
+}
+/* -------------------------------------- */
+
 footer {
   padding: 15px;
 }
@@ -122,4 +153,10 @@ footer {
 Citation for loading indicator
 Date: 5/16/2025
 Copied from:  https://cssloaders.github.io/
+*/
+
+/* 
+Citation for button styling
+Date: 5/25/2025
+Copied from: https://uiverse.io/barisdogansutcu/fuzzy-bullfrog-72 
 */
