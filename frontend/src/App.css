@@ -30,7 +30,7 @@
 
 .dropdowns select {
   padding: 3px;
-  border-radius: 5px;
+  border-radius: 20px;
 }
 
 .loading {
@@ -58,8 +58,10 @@
 textarea {
   width: 45%;
   height: 50px;
-  border-radius: 5px;
+  border-radius: 20px;
   resize: vertical;
+  /* remove resize element */
+  resize: none;
 }
 
 .image img {
@@ -69,10 +71,10 @@ textarea {
   width: 45%;
   border-style: solid;
   border-width: 10px;
-  border-radius: 5px;
+  border-radius: 20px;
   box-shadow: 5px 5px rgb(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
   /* smooth animation for hover */
+  transition: transform 0.3s ease;
 }
 
 /* enlarge image on hover to get a better look */
@@ -93,7 +95,7 @@ textarea {
   padding-right: 10px;
   border-style: solid;
   border-color: rgb(115, 115, 115);
-  border-radius: 5px;
+  border-radius: 20px;
   border-width: 1px;
   line-height: 1.5;
   font-family: "Merienda", cursive;
@@ -116,7 +118,7 @@ textarea {
 /* -------------------------------------- */
 button {
   padding: 12px 20px;
-  border-radius: 50px;
+  border-radius: 20px;
   cursor: pointer;
   border: 0;
   background-color: white;
