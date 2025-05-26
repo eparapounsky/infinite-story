@@ -24,12 +24,13 @@
 .dropdowns {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 55px;
   margin-bottom: 20px;
 }
 
 .dropdowns select {
   padding: 12px 20px;
+  padding-left: 1px;
   border-radius: 20px;
   font-size: 25px;
   font-family: "Bangers", system-ui;
@@ -42,6 +43,7 @@
   letter-spacing: 1.5px;
   text-transform: uppercase;
   text-align: center;
+  width: 6em;
   /* remove native arrow */
   -webkit-appearance: none;
   -moz-appearance: none;
