@@ -33,7 +33,7 @@
   box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: black;
+  text-align: center;
 }
 
 .loading {
