@@ -1,19 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bangers&display=swap");
 
 .App {
   text-align: center;
 }
 
 .header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
+  font-family: "Bangers", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 40px;
 }
 
-#new-story {
-  margin-left: 65px;
-  margin-top: 10px;
+.header h1 {
+  margin: 0 0 20px;
+  margin-top: 20px;
+}
+
+.new-div {
+  margin-bottom: 20px;
 }
 
 .dropdowns {
@@ -26,7 +31,10 @@
 .dropdowns select {
   padding: 12px 20px;
   border-radius: 20px;
-  font-size: 15px;
+  font-size: 25px;
+  font-family: "Bangers", system-ui;
+  font-weight: 50;
+  font-style: normal;
   border: 1px solid rgba(255, 255, 255, 0.6);
   cursor: pointer;
   background-color: white;
@@ -127,7 +135,7 @@ textarea::selection {
 .buttons {
   display: flex;
   justify-content: center;
-  gap: 65px;
+  gap: 50px;
   margin-top: 20px;
 }
 
@@ -140,9 +148,12 @@ button {
   box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  font-size: 15px;
   color: black;
   transition: all 0.5s ease;
+  font-size: 25px;
+  font-family: "Bangers", system-ui;
+  font-weight: 100;
+  font-style: normal;
 }
 
 button:hover {
