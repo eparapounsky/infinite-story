@@ -119,7 +119,10 @@ function App() {
     <div className="App">
       <div className="header">
         <h1>Infinite Story Generator</h1>
-        <button id="new-story" onClick={resetStory} disabled={loading}>
+      </div>
+
+      <div className="new-div">
+        <button onClick={resetStory} disabled={loading}>
           New Story
         </button>
       </div>
