@@ -12,13 +12,8 @@
 }
 
 #new-story {
-  /* padding: 7px; */
   margin-left: 20px;
   margin-top: 10px;
-  /* border-radius: 5px; */
-  /* border-width: 1px; */
-  /* background-color: green;
-  color: white; */
 }
 
 .dropdowns {
@@ -32,6 +27,10 @@
   padding: 5px;
   border-radius: 20px;
   font-size: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  background-color: white;
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
 }
 
 .loading {
@@ -65,6 +64,7 @@ textarea {
   border-radius: 20px;
   font-size: 15px;
   overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.6);
   /* remove resize element */
   resize: none;
 }
