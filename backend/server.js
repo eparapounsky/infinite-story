@@ -43,11 +43,11 @@ app.post("/story", async (req, res) => {
     if (history.length === 1) {
       styledPrompt =
         [
-          tone ? `a ${tone}` : "an entertaining",
+          tone ? `A ${tone}` : "An entertaining",
           genre ? `${genre} story` : "story",
           `about "${prompt.trim()}"`,
-          theme ? `with a theme of ${theme}` : "",
-          "Please write under 200 words in complete sentences, carrying the plot forward smoothly and finishing every sentence without cutting off mid-thought.",
+          theme ? `with a theme of ${theme}.` : "",
+          "Please write under 200 words in complete sentences, finishing every sentence without cutting off mid-thought.",
         ]
           .filter(Boolean)
           .join(" ") + ".";
@@ -55,7 +55,7 @@ app.post("/story", async (req, res) => {
       // subsequent chunks: incorporate whatever the user typed into the continuation cue
       styledPrompt =
         `Please continue the story about "${prompt.trim()}" ` +
-        `under 200 words in complete sentences, carrying the plot forward smoothly and finishing every sentence without cutting off mid-thought.`;
+        `in 200 words or less, in complete sentences, carrying the plot forward smoothly, and finishing every sentence without cutting off mid-thought.`;
     }
 
     // add user prompt to history
