@@ -43,7 +43,7 @@
   letter-spacing: 1.5px;
   text-transform: uppercase;
   text-align: center;
-  width: 6em;
+  width: 7em;
   /* remove native arrow */
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -79,7 +79,8 @@
 }
 
 textarea {
-  width: 45%;
+  /* width: 45%; */
+  width: 42em;
   min-height: 4em;
   height: auto;
   padding: 0.8rem 1rem;
@@ -131,7 +132,7 @@ textarea::selection {
   padding-right: 10px;
   background-color: white;
   border-style: solid;
-  border-width: 5px;
+  border-width: 10px;
   border-radius: 20px;
   box-shadow: 5px 5px rgb(0, 0, 0, 0.1);
   line-height: 1.5;
@@ -148,7 +149,7 @@ textarea::selection {
 .buttons {
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 80px;
   margin-top: 20px;
 }
 
