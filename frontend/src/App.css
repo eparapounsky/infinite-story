@@ -129,10 +129,11 @@ textarea::selection {
   margin-bottom: 15px;
   padding-left: 10px;
   padding-right: 10px;
+  background-color: white;
   border-style: solid;
-  border-color: rgb(115, 115, 115);
+  border-width: 5px;
   border-radius: 20px;
-  border-width: 1px;
+  box-shadow: 5px 5px rgb(0, 0, 0, 0.1);
   line-height: 1.5;
   font-family: "Merienda", cursive;
   font-optical-sizing: auto;
@@ -197,5 +198,5 @@ Copied from:  https://cssloaders.github.io/
 /* 
 Citation for button styling
 Date: 5/25/2025
-Copied from: https://uiverse.io/barisdogansutcu/fuzzy-bullfrog-72 
+Adapted from: https://uiverse.io/barisdogansutcu/fuzzy-bullfrog-72 
 */
