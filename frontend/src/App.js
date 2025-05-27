@@ -128,35 +128,40 @@ function App() {
       </div>
 
       <div className="dropdowns">
-        <select value={genre} onChange={(e) => setGenre(e.target.value)}>
-          <option value="" disabled hidden>
-            Genre
-          </option>
-          <option value="fantasy">Fantasy</option>
-          <option value="sci-fi">Sci-Fi</option>
-          <option value="mystery">Mystery</option>
-          <option value="romance">Romance</option>
-          <option value="horror">Horror</option>
-        </select>
-
         <select value={tone} onChange={(e) => setTone(e.target.value)}>
           <option value="" disabled hidden>
             Tone
           </option>
-          <option value="lighthearted">Lighthearted</option>
-          <option value="serious">Serious</option>
           <option value="dark">Dark</option>
+          <option value="epic">Epic</option>
           <option value="humorous">Humorous</option>
+          <option value="lighthearted">Light-hearted</option>
+          <option value="melancholic">Melancholic</option>
+          <option value="serious">Serious</option>
+        </select>
+
+        <select value={genre} onChange={(e) => setGenre(e.target.value)}>
+          <option value="" disabled hidden>
+            Genre
+          </option>
+          <option value="adventure">Adventure</option>
+          <option value="drama">Drama</option>
+          <option value="fantasy">Fantasy</option>
+          <option value="horror">Horror</option>
+          <option value="mystery">Mystery</option>
+          <option value="romance">Romance</option>
+          <option value="sci-fi">Sci-Fi</option>
         </select>
 
         <select value={theme} onChange={(e) => setTheme(e.target.value)}>
           <option value="" disabled hidden>
             Theme
           </option>
+          <option value="fate-and-destiny">Fate & Destiny</option>
+          <option value="freedom">Freedom</option>
           <option value="friendship">Friendship</option>
-          <option value="adventure">Adventure</option>
-          <option value="revenge">Revenge</option>
-          <option value="coming-of-age">Coming of Age</option>
+          <option value="good-vs-evil">Good vs. Evil</option>
+          <option value="self-discovery">Self-Discovery</option>
           <option value="survival">Survival</option>
         </select>
       </div>
