@@ -49,7 +49,7 @@
   -moz-appearance: none;
   appearance: none;
   /* 2. custom arrow as background */
-  background-image: url('\\arrow4.png');
+  background-image: url("\\arrow4.png");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1em;
@@ -60,7 +60,7 @@
   width: 48px;
   height: 48px;
   border: 5px solid #fff;
-  border-bottom-color: #5d18dc;
+  border-bottom-color: #3581fc;
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
@@ -170,16 +170,16 @@ button {
 
 button:hover {
   letter-spacing: 3px;
-  background-color: hsl(261deg 80% 48%);
+  background-color: #3581fc;
   color: hsl(0, 0%, 100%);
-  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+  box-shadow: rgb(53 129 252) 0px 7px 29px 0px;
 }
 
 button:active {
   letter-spacing: 3px;
-  background-color: hsl(261deg 80% 48%);
+  background-color: #3581fc;
   color: hsl(0, 0%, 100%);
-  box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+  box-shadow: rgb(53 129 252) 0px 7px 29px 0px;
   transform: translateY(10px);
   transition: 100ms;
 }
