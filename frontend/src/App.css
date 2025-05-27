@@ -65,7 +65,7 @@
   display: inline-block;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 @keyframes rotation {
@@ -140,10 +140,6 @@ textarea::selection {
   font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
-}
-
-.ellipsis {
-  font-size: larger;
 }
 
 .buttons {
