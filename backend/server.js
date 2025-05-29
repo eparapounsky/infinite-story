@@ -42,8 +42,8 @@ app.post("/story", async (req, res) => {
     let styledPrompt = "";
     if (history.length === 1) {
       styledPrompt =
-        [
-          tone ? `A ${tone}` : "An entertaining",
+        [ "Give the beginning of",
+          tone ? `A ${tone}` : "an entertaining",
           genre ? `${genre} story` : "story",
           `about "${prompt.trim()}"`,
           theme ? `with a theme of ${theme}.` : "",
@@ -54,8 +54,8 @@ app.post("/story", async (req, res) => {
     } else {
       // subsequent chunks: incorporate whatever the user typed into the continuation cue
       styledPrompt =
-        `Please continue the story about "${prompt.trim()}" ` +
-        `in 200 words or less, in complete sentences, carrying the plot forward smoothly, and finishing every sentence without cutting off mid-thought.`;
+        `Continue the story about "${prompt.trim()}" ` +
+        `in 200 words or less, carrying the plot forward smoothly, and finishing every sentence without cutting off mid-thought.`;
     }
 
     // add user prompt to history
@@ -65,7 +65,7 @@ app.post("/story", async (req, res) => {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: history,
-      max_completion_tokens: 300, // length of story
+      max_completion_tokens: 210, // length of story
       stop: ["<<END>>"],
     });
 
