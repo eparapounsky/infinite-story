@@ -44,10 +44,10 @@ app.post("/story", async (req, res) => {
       styledPrompt =
         [
           "Give the beginning of",
-          tone ? `A ${tone}` : "an entertaining",
+          tone ? `a ${tone}` : "an entertaining",
           genre ? `${genre} story` : "story",
           `about "${prompt.trim()}"`,
-          theme ? `with a theme of ${theme}.` : "",
+          theme ? `with a theme of ${theme}.` : ".",
           "Write under 200 words in complete sentences. Finish every sentence without cutting off mid-thought.",
         ]
           .filter(Boolean)
@@ -74,13 +74,10 @@ app.post("/story", async (req, res) => {
     const story_response = completion.choices[0].message.content;
     history.push({ role: "assistant", content: story_response });
 
-    // avoid image_generation_user_error
-    let image_prompt = `Create a family-friendly image based on: ${story_response}`;
-
     // use GPT's response to generate image
     const result = await openai.images.generate({
       model: "dall-e-3",
-      prompt: image_prompt,
+      prompt: `Create a family-friendly image based on: ${story_response}`, // avoid image_generation_user_error
       size: "1024x1024",
     });
 
