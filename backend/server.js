@@ -7,7 +7,8 @@ import OpenAI from "openai";
 import cors from "cors";
 // create app
 const app = express();
-const port = 5000;
+const PORT = process.env.PORT || 5000; // default to 5000 locally
+// const port = 5000;
 // set up middleware
 app.use(cors());
 app.use(express.json());
@@ -136,8 +137,8 @@ app.post("/new", async (req, res) => {
 });
 
 // ------------------- start the server -------------------
-app.listen(port, () => {
-  console.log(`App  listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`App  listening on port ${PORT}`);
 });
 
 // Citation for file structure
