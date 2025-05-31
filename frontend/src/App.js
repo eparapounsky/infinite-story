@@ -15,11 +15,14 @@ function App() {
   const [lastPrompt, setLastPrompt] = useState(null);
   const [loading, setLoading] = useState(false); // loading state
 
+  // read base url from process.env if available
+  const API_BASE = process.env.REACT_APP_API_BASE_URL || ""; 
+
   // Continue handler
   async function continueStory(payload) {
     setLoading(true); // start loading
     try {
-      const response = await fetch("http://localhost:5000/story", {
+      const response = await fetch(`${API_BASE}/story`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -53,10 +56,10 @@ function App() {
     setLoading(true);
     try {
       // 1) Instruct server to drop the current chunk
-      await fetch("http://localhost:5000/undo", { method: "POST" });
+      await fetch(`${API_BASE}/undo`, { method: "POST" });
 
       // 2) Re-POST the exact same payload to /story
-      const response = await fetch("http://localhost:5000/story", {
+      const response = await fetch(`${API_BASE}/story`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(lastPrompt),
@@ -85,7 +88,7 @@ function App() {
       setImageUrl(prevEntry.imageUrl);
       setLastPrompt(prevEntry.prompt);
 
-      await fetch("http://localhost:5000/undo", { method: "POST" });
+      await fetch(`${API_BASE}/undo`, { method: "POST" });
     } catch (error) {
       console.error("Error undoing on server:", error);
     } finally {
@@ -97,7 +100,7 @@ function App() {
   async function resetStory() {
     try {
       // tell server to wipe its history first
-      await fetch("http://localhost:5000/new", { method: "POST" });
+      await fetch(`${API_BASE}/new`, { method: "POST" });
 
       // only after server confirms, clear all client state
       setGenre("");
