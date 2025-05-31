@@ -5,6 +5,7 @@ dotenv.config();
 import express from "express";
 import OpenAI from "openai";
 import cors from "cors";
+import path from "path"
 // create app
 const app = express();
 const PORT = process.env.PORT || 5000; // default to 5000 locally
