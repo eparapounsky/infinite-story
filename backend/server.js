@@ -136,6 +136,15 @@ app.post("/new", async (req, res) => {
   }
 });
 
+// ------------------- static serve the react build -------------------
+// point express at the “frontend/build” folder, so any file request under /static, /favicon.ico, etc., will be served automatically
+app.use(express.static(path.resolve(__dirname, "../frontend/build")));
+
+// catch all: for any route not handled above (like GET /), send back index.html
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+});
+
 // ------------------- start the server -------------------
 app.listen(PORT, () => {
   console.log(`App  listening on port ${PORT}`);
