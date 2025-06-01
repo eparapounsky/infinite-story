@@ -117,6 +117,7 @@ select {
 /* add spacing throughout story text for paragraphs */
 .story {
   white-space: pre-line;
+  text-align: justify;
 }
 
 textarea {
@@ -144,6 +145,7 @@ textarea::selection {
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
   margin-bottom: 10px;
+  margin: auto;
 }
 
 @keyframes rotation {
@@ -204,17 +206,25 @@ footer {
   body {
     display: flex;
     justify-content: center;
+    font-size: 1.34rem;
   }
 
   .App {
     max-width: 75rem;
     width: 100%;
+    position: relative; /* so absolutely positioned children are relative to .App */
   }
 
+  /* larger header and buttons */
   .header h1 {
-    font-size: 4.5em;
+    font-size: 5.5rem;
   }
 
+  button {
+    font-size: 1.7rem;
+  }
+
+  /* button interactivity */
   button:hover {
     letter-spacing: 3px;
     background-color: #3581fc;
@@ -231,6 +241,25 @@ footer {
     transition: 100ms;
   }
 
+  /* make dropdowns narrower & centered after story/image loads */
+  .dropdowns {
+    justify-content: center;
+  }
+
+  .dropdowns select {
+    flex: 0 0 12rem;
+    max-width: 100%;
+    font-size: 1.7rem;
+  }
+
+  .loading {
+    /* force loader to occupy row 4 of the grid, spanning both story/image columns */
+    grid-row: 4 / 5;
+    grid-column: 1 / -1;
+    /* give loader a white, semi-opaque background so it “dims” the content beneath. */
+    background: rgba(255, 255, 255, 0.8);
+  }
+
   /* two-column content region */
   .image,
   .story {
@@ -239,10 +268,17 @@ footer {
 
   .image {
     grid-area: img;
+    margin-right: var(--gap); 
+    margin-top: 1.7rem;
   }
 
   .story {
     grid-area: txt;
+    font-size: 1.1rem;
+  }
+
+  textarea {
+    font-size: 1.1rem;
   }
 
   /* turn main content into grid */
@@ -291,6 +327,7 @@ footer {
 
   footer {
     grid-area: foot;
+    font-size: 1rem;
   }
 }
 
