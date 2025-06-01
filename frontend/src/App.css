@@ -1,55 +1,104 @@
 @import url("https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bangers&display=swap");
 
-.App {
-  text-align: center;
+/* -------------------  rules for all media sizes ------------------- */
+:root {
+  /* global spacing scale   */
+  --gap: 1rem;
+  /* card & button rounding */
+  --radius: 0.75rem;
+  /* app wide accent color */
+  --brand: #1366ff;
+  --bg: #b8d2fc;
+  font-family: system-ui, sans-serif;
 }
 
-.header {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+button,
+select,
+textarea {
+  font: inherit;
+}
+
+.App {
+  padding: var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* -------------------  mobile layout (no media query needed) ------------------- */
+.header h1 {
+  font-size: 35px;
+  text-align: center;
   font-family: "Bangers", system-ui;
   font-weight: 400;
   font-style: normal;
-  font-size: 33px;
 }
 
-.header h1 {
-  margin: 0 0 20px;
-  margin-top: 20px;
+.new-div,
+.buttons {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  gap: var(--gap);
 }
 
-.new-div {
-  margin-bottom: 20px;
+button {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5ch;
+  font-family: "Bangers", system-ui;
+  font-weight: 100;
+  font-style: normal;
+}
+
+/* show x'd-out cursor on buttons you can't click */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .dropdowns {
   display: flex;
-  justify-content: center;
-  gap: 55px;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: var(--gap);
+  padding-left: 5rem;
+  padding-right: 5rem;
 }
 
-.dropdowns select {
-  padding: 9px;
-  padding-left: 1px;
-  border-radius: 20px;
-  font-size: 25px;
+select {
+  padding: 0.4rem;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
   font-family: "Bangers", system-ui;
   font-weight: 50;
   font-style: normal;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  cursor: pointer;
-  background-color: white;
-  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
   text-align: center;
-  width: 8.5em;
   /* remove native arrow */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  /* 2. custom arrow as background */
-  /* background-image: url("\\arrow4.png"); */
+  /* custom arrow as background */
   background-image: url("./arrow4.png");
   background-repeat: no-repeat;
   background-position: right 1rem center;
@@ -57,6 +106,34 @@
   padding-right: 1.5em;
 }
 
+/* story image */
+.image img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* add spacing throughout story text for paragraphs */
+.story {
+  white-space: pre-line;
+}
+
+textarea {
+  min-height: 6rem;
+  padding: 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+  /* remove resize element */
+  resize: none;
+}
+
+/* change highlight color for prompt text */
+textarea::selection {
+  background: rgba(115, 115, 115, 0.3);
+}
+
+/* spinning loader */
 .loading {
   width: 48px;
   height: 48px;
@@ -79,112 +156,142 @@
   }
 }
 
-textarea {
-  /* width: 45%; */
-  width: 50em;
-  min-height: 4em;
-  height: auto;
-  padding: 0.8rem 1rem;
-  box-sizing: border-box;
-  border-radius: 20px;
-  font-size: 15px;
-  overflow: auto;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  /* remove resize element */
-  resize: none;
-}
-
-textarea::-webkit-scrollbar {
-  display: none;
-}
-
-textarea::selection {
-  background: rgba(115, 115, 115, 0.3);
-}
-
-.image img {
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  width: 40%;
-  border-style: solid;
-  border-width: 10px;
-  border-radius: 20px;
-  box-shadow: 5px 5px rgb(0, 0, 0, 0.1);
-  /* smooth animation for hover */
-  transition: transform 0.3s ease;
-}
-
-/* enlarge image on hover to get a better look */
-.image img:hover {
-  transform: scale(1.5);
-}
-
-/* use rules only when story container is not empty */
-#story:not(:empty) {
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  width: 75%;
-  text-align: left;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: white;
-  border-style: solid;
-  border-width: 10px;
-  border-radius: 20px;
-  box-shadow: 5px 5px rgb(0, 0, 0, 0.1);
-  line-height: 1.5;
-  font-family: "Merienda", cursive;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 140px;
-  margin-top: 20px;
-}
-
-button {
-  padding: 12px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  border: 0;
-  background-color: white;
-  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: black;
-  transition: all 0.5s ease;
-  font-size: 25px;
-  font-family: "Bangers", system-ui;
-  font-weight: 100;
-  font-style: normal;
-}
-
-button:hover {
-  letter-spacing: 3px;
-  background-color: #3581fc;
-  color: hsl(0, 0%, 100%);
-  box-shadow: rgb(53 129 252) 0px 7px 29px 0px;
-}
-
-button:active {
-  letter-spacing: 3px;
-  background-color: #3581fc;
-  color: hsl(0, 0%, 100%);
-  box-shadow: rgb(53 129 252) 0px 7px 29px 0px;
-  transform: translateY(10px);
-  transition: 100ms;
-}
-
 footer {
-  padding: 15px;
+  text-align: center;
+  font-size: 0.875rem;
+  opacity: 0.7;
+  margin-top: var(--gap);
+}
+
+/* ------------------- ≥ 600 px – tablets ------------------- */
+@media (min-width: 600px) {
+  .header h1 {
+    font-size: 60px;
+  }
+
+  /* put dropdowns & buttons on a row */
+  .dropdowns,
+  .buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .dropdowns select,
+  .buttons button {
+    flex: 1 1 auto;
+  }
+
+  /* shrink image and story */
+  .image,
+  .story {
+    margin-inline: auto;
+    max-width: 40rem;
+  }
+
+  textarea {
+    margin-left: 5rem;
+    margin-right: 5rem;
+  }
+}
+
+/* ------------------- ≥ 1024 px – desktop & wide screens ------------------- */
+@media (min-width: 1024px) {
+  :root {
+    --gap: 1.5rem;
+  }
+
+  /* constrain overall width and center the app */
+  body {
+    display: flex;
+    justify-content: center;
+  }
+
+  .App {
+    max-width: 75rem;
+    width: 100%;
+  }
+
+  .header h1 {
+    font-size: 4.5em;
+  }
+
+  button:hover {
+    letter-spacing: 3px;
+    background-color: #3581fc;
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(53 129 252) 0px 7px 29px 0px;
+  }
+
+  button:active {
+    letter-spacing: 3px;
+    background-color: #3581fc;
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(53 129 252) 0px 7px 29px 0px;
+    transform: translateY(10px);
+    transition: 100ms;
+  }
+
+  /* two-column content region */
+  .image,
+  .story {
+    max-width: none;
+  }
+
+  .image {
+    grid-area: img;
+  }
+
+  .story {
+    grid-area: txt;
+  }
+
+  /* turn main content into grid */
+  .App {
+    display: grid;
+    grid-template:
+      "head head" auto
+      "new  new" auto
+      "drop drop" auto
+      "img  txt" 1fr
+      "area area" auto
+      "btns btns" auto
+      "foot foot" auto
+      / 1fr 1fr;
+    gap: var(--gap);
+  }
+
+  .header {
+    grid-area: head;
+  }
+
+  .new-div {
+    grid-area: new;
+    flex-direction: row;
+  }
+
+  .dropdowns {
+    grid-area: drop;
+  }
+
+  .image {
+    grid-area: img;
+  }
+
+  .story {
+    grid-area: txt;
+  }
+
+  textarea {
+    grid-area: area;
+  }
+
+  .buttons {
+    grid-area: btns;
+  }
+
+  footer {
+    grid-area: foot;
+  }
 }
 
 /* 
