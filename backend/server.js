@@ -148,7 +148,7 @@ app.post("/new", async (req, res) => {
 app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 
 // catch all: for any route not handled above (like GET /), send back index.html
-app.get("/*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
 
