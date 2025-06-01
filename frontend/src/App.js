@@ -16,7 +16,7 @@ function App() {
   const [loading, setLoading] = useState(false); // loading state
 
   // read base url from process.env if available
-  const API_BASE = process.env.REACT_APP_API_BASE_URL || ""; 
+  const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 
   // Continue handler
   async function continueStory(payload) {
@@ -182,11 +182,7 @@ function App() {
       )}
 
       <div className="story" id="story">
-        {story && (
-          <p>
-            {story}
-          </p>
-        )}
+        {story && <p>{story}</p>}
       </div>
 
       <textarea
