@@ -81,9 +81,8 @@ button:disabled {
 .dropdowns {
   display: flex;
   flex-direction: column;
+  margin: auto;
   gap: var(--gap);
-  padding-left: 5rem;
-  padding-right: 5rem;
 }
 
 select {
@@ -104,6 +103,8 @@ select {
   background-position: right 1rem center;
   background-size: 1em;
   padding-right: 1.5em;
+  width: 10rem;
+  text-align: center;
 }
 
 /* story image */
@@ -285,7 +286,7 @@ footer {
     /* force loader to occupy row 4 of the grid, spanning both story/image columns */
     grid-row: 4 / 5;
     grid-column: 1 / -1;
-    /* give loader a white, semi-opaque background so it “dims” the content beneath. */
+    /* give loader a white, semi opaque background */
     background: rgba(255, 255, 255, 0.8);
   }
 
