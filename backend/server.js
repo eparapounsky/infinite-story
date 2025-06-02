@@ -69,7 +69,7 @@ app.post("/story", async (req, res) => {
 
     // send prompt to OpenAI
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-3.5-turbo",
       messages: history,
       max_completion_tokens: 250, // length of story
       stop: ["<<END>>"],
