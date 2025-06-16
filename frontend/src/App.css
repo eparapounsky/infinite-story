@@ -98,7 +98,7 @@ select {
   -moz-appearance: none;
   appearance: none;
   /* custom arrow as background */
-  background-image: url("./arrow4.png");
+  background-image: url("./arrow2.png");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1em;
