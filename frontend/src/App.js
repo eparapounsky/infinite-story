@@ -219,8 +219,7 @@ function App() {
       </div>
 
       <footer>
-        © 2025 Infinite Story Generator. Created by Vincent Le & Elena
-        Parapounsky.
+        © 2025 Elena Parapounsky. All rights reserved.
       </footer>
     </div>
   );
