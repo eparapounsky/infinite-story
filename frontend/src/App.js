@@ -218,9 +218,7 @@ function App() {
         </button>
       </div>
 
-      <footer>
-        © 2025 Elena Parapounsky. All rights reserved.
-      </footer>
+      <footer>© 2025 Elena Parapounsky. All rights reserved.</footer>
     </div>
   );
 }
