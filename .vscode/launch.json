@@ -12,8 +12,6 @@
       },
       "console": "integratedTerminal",
       "envFile": "${workspaceFolder}/backend/.env",
-      // if you compile with Babel/TypeScript, adjust outFiles:
-      // "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     },
     {
       "name": "Debug Frontend",
