@@ -297,19 +297,23 @@ footer {
   }
 
   .image {
-    grid-area: img;
     margin-right: var(--gap);
     margin-top: 1.1rem;
   }
 
   .story {
-    grid-area: txt;
     font-size: 1.1rem;
-    margin-top: 1.7rem;
+    display: flex;
+    align-items: center;
   }
 
   textarea {
     font-size: 1.1rem;
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    display: block;
   }
 
   /* turn main content into grid */
