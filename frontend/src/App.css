@@ -298,7 +298,10 @@ footer {
 
   .image {
     margin-right: var(--gap);
-    margin-top: 1.1rem;
+    margin-top: var(--gap);
+    margin-bottom: var(--gap);
+    display: flex;
+    align-items: center;
   }
 
   .story {
