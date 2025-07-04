@@ -3,7 +3,7 @@
 Create endlessly branching narratives & illustrated scenes powered by GPT‑4 and DALL-E.
 
 ## Live Demo
-See the project at [Infinite Story](https://infinite-story-production.up.railway.app/)
+See the project at [Infinite Story](https://infinite-story.up.railway.app/)
 
 ## Features
 - **Infinite storytelling**: Generates a story segment using GPT-4 based on user prompts
