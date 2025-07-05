@@ -4,7 +4,7 @@
 See the project [here](https://infinite-story.up.railway.app/)
 
 ## Features
-- **Infinite storytelling**: Generates a story segment using GPT-4 based on user prompts
+- **Infinite storytelling**: Continously generates story segments using GPT-4 based on user prompts
 - **Branching prompts**: Readers can inject new ideas at any point to steer the plot
 - **Context memory**: Maintains characters, settings, and narrative style across segments
 - **Accompanying illustrations**: Generates scene art with DALL-E for each story segment
