@@ -115,35 +115,26 @@ select {
   box-shadow: 4px 4px rgb(0, 0, 0, 0.1);
   border-style: solid;
   border-width: 8px;
-  border-radius: 20px;
 }
 
-/* add spacing throughout story text for paragraphs */
-.story {
-  white-space: pre-line;
-  text-align: justify;
-}
-
+/* story text */
 /* use rules only when story container is not empty */
-/* #story:not(:empty) {
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: white;
-  border-style: solid;
-  border-width: 8px;
-  border-radius: 20px;
+.story:not(:empty) {
+  /* layout */
+  margin: 1rem auto; /* background same size as image */
+  padding: 1.5rem;
+  text-align: justify;
+
+  /* styling */
+  background-color: #f9f9f9;
+  border-radius: var(--radius);
   box-shadow: 4px 4px rgb(0, 0, 0, 0.1);
-  line-height: 1.5;
-  font-family: "Merienda", cursive;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
-} */
+
+  /* typography */
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.7;
+}
 
 textarea {
   min-height: 6rem;
@@ -301,13 +292,13 @@ footer {
     margin-top: var(--gap);
     margin-bottom: var(--gap);
     display: flex;
-    align-items: center;
+    align-items: center; /* vertical centering */
   }
 
   .story {
     font-size: 1.1rem;
     display: flex;
-    align-items: center;
+    align-items: center; /* vertical centering */
   }
 
   textarea {
