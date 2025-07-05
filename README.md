@@ -1,7 +1,5 @@
 # Infinite Story Generator
 
-Create endlessly branching narratives & illustrated scenes powered by GPT‑4 and DALL-E.
-
 ## Live Demo
 See the project [here](https://infinite-story.up.railway.app/)
 
