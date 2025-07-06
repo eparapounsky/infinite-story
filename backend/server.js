@@ -97,7 +97,16 @@ app.post("/story", async (req, res) => {
     res.json(story_and_image);
   } catch (error) {
     console.error("Error occurred creating story: ", error);
-    res.status(500).json({ error: "Error occurred creating story." });
+
+    // try to extract error type, fallback to generic if unavailable
+    let errorMessage = "Error occurred creating story.";
+
+    if (error?.type) {
+      errorMessage = error?.type;
+    } 
+
+    // send error message to frontend
+    res.status(500).json({ error: errorMessage });
   }
 });
 
@@ -115,7 +124,7 @@ app.post("/undo", (req, res) => {
     return res.sendStatus(200);
   } catch (error) {
     console.error("Error in /undo:", error);
-    return res.status(500).json({ error: "Undo failed." });
+    res.status(500).json({ error: "Undo failed." });
   }
 });
 
