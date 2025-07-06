@@ -94,7 +94,8 @@ app.post("/story", async (req, res) => {
       { story: story_response },
       { image: image_response },
     ];
-    res.json(story_and_image);
+
+    return res.json(story_and_image);
   } catch (error) {
     console.error("Error occurred creating story: ", error);
 
@@ -102,28 +103,38 @@ app.post("/story", async (req, res) => {
     let errorMessage = "Error occurred creating story.";
     if (error?.type) {
       errorMessage = error?.type;
-    } 
+    }
 
     // send error message to frontend
-    res.status(500).json({ error: errorMessage });
+    return res.status(500).json({ error: errorMessage });
   }
 });
 
 // ------------------- endpoint to undo last turn -------------------
 app.post("/undo", (req, res) => {
   try {
-    // Remove the last assistant message and its corresponding user prompt
+    // remove the last assistant message and its corresponding user prompt
     let removed = 0;
+
     for (let i = history.length - 1; i >= 0 && removed < 2; i--) {
       if (history[i].role !== "system") {
         history.splice(i, 1);
         removed++;
       }
     }
+
     return res.sendStatus(200);
   } catch (error) {
-    console.error("Error in /undo:", error);
-    res.status(500).json({ error: "Undo failed." });
+    console.error("Error occurred undoing story: ", error);
+
+    // try to extract error type, fallback to generic if unavailable
+    let errorMessage = "Error occurred undoing story.";
+    if (error?.type) {
+      errorMessage = error?.type;
+    }
+
+    // send error message to frontend
+    return res.status(500).json({ error: errorMessage });
   }
 });
 
