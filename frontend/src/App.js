@@ -88,8 +88,10 @@ function App() {
 
   // Undo handler
   async function handleUndo() {
-    if (historyStack.length === 0 || loading) return;
+    if (historyStack.length === 0 || loading) return; // no history to undo
+
     setLoading(true);
+
     try {
       const prevEntry = historyStack[historyStack.length - 1];
       setHistoryStack((stack) => stack.slice(0, -1));
@@ -99,7 +101,9 @@ function App() {
 
       await fetch(`${API_BASE}/undo`, { method: "POST" });
     } catch (error) {
+      // handle error from server
       console.error("Error undoing on server:", error);
+      alert("Error undoing last action. Please try again.");
     } finally {
       setLoading(false);
     }
