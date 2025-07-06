@@ -100,7 +100,6 @@ app.post("/story", async (req, res) => {
 
     // try to extract error type, fallback to generic if unavailable
     let errorMessage = "Error occurred creating story.";
-
     if (error?.type) {
       errorMessage = error?.type;
     } 
