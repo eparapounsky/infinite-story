@@ -27,6 +27,15 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+
+      // check if an error occurred
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error}`);
+        setLoading(false);
+        return;
+      }
+
       const data = await response.json();
       // unpack the [ { story }, { image } ] response array
       const [storyObj, imageObj] = data;
@@ -177,7 +186,7 @@ function App() {
       {/* display generated image if available */}
       {imageUrl && (
         <div className="image">
-          <img src={imageUrl} alt="Illustration for story" />
+          <img src={imageUrl} alt="Story illustration" />
         </div>
       )}
 
