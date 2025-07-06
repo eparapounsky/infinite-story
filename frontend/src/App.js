@@ -31,7 +31,7 @@ function App() {
       // check if an error occurred
       if (!response.ok) {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error}`);
+        alert(`Error creating story or image: ${errorData.error}. Please try again.`);
         setLoading(false);
         return;
       }
