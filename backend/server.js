@@ -127,12 +127,6 @@ app.post("/undo", (req, res) => {
   } catch (error) {
     console.error("Error occurred undoing story: ", error);
 
-    // try to extract error type, fallback to generic if unavailable
-    let errorMessage = "Error occurred undoing story.";
-    if (error?.type) {
-      errorMessage = error?.type;
-    }
-
     // send error message to frontend
     return res.status(500).json({ error: errorMessage });
   }
