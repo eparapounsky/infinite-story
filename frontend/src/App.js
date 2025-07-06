@@ -28,14 +28,6 @@ function App() {
         body: JSON.stringify(payload),
       });
 
-      // check if an error occurred
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert(`Error creating story or image: ${errorData.error}. Please try again.`);
-        setLoading(false);
-        return;
-      }
-
       const data = await response.json();
       // unpack the [ { story }, { image } ] response array
       const [storyObj, imageObj] = data;
@@ -53,7 +45,7 @@ function App() {
       setStory(storyObj.story);
       setImageUrl(imageObj.image);
     } catch (error) {
-      console.error("Error fetching story:", error);
+      alert(`Error creating story or image. Please try again.`);
     } finally {
       setLoading(false); // stop loading
     }
