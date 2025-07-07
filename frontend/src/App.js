@@ -225,7 +225,7 @@ function App() {
 
       <footer>
         <p> © 2025 Elena Parapounsky. All rights reserved. </p>
-        <a href="https://github.com/eparapounsky/infinite-story">Source on GitHub</a>
+        <a href="https://github.com/eparapounsky/infinite-story">🔍 Source on GitHub</a>
       </footer>
     </div>
   );
