@@ -167,6 +167,9 @@ app.listen(PORT, () => {
   console.log(`App  listening on port ${PORT}`);
 });
 
+// ------------------- export the app for testing purposes to import it in test files -------------------
+export default app;
+
 // Citation for file structure
 // Date: 4/22/2025
 // Adapted from: https://expressjs.com/en/starter/hello-world.html
