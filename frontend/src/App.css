@@ -182,10 +182,31 @@ textarea::-webkit-scrollbar {
 }
 
 footer {
-  text-align: center;
-  font-size: 0.875rem;
-  opacity: 0.7;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   margin-top: var(--gap);
+}
+
+footer a {
+  margin-top: var(--gap);
+}
+
+/* unvisited */
+footer a:link {
+  color: var(--brand);
+  text-decoration: none;
+}
+
+footer a:visited {
+  color: #1366ff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #144592;
+  text-decoration: underline;
 }
 
 /* ------------------- ≥ 600 px – tablets ------------------- */
