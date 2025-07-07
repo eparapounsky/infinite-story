@@ -45,6 +45,7 @@ function App() {
       setStory(storyObj.story);
       setImageUrl(imageObj.image);
     } catch (error) {
+      console.error("Error creating story:", error);
       alert(`Error creating story or image. Please try again.`);
     } finally {
       setLoading(false); // stop loading
@@ -73,6 +74,7 @@ function App() {
       setImageUrl(imageObj.image);
     } catch (error) {
       console.error("Error regenerating story:", error);
+      alert(`Error regenerating story or image. Please try again.`);
     } finally {
       setLoading(false);
     }
@@ -93,8 +95,7 @@ function App() {
 
       await fetch(`${API_BASE}/undo`, { method: "POST" });
     } catch (error) {
-      // handle error from server
-      console.error("Error undoing on server:", error);
+      console.error("Error undoing story segment:", error);
       alert("Error undoing last action. Please try again.");
     } finally {
       setLoading(false);
@@ -107,7 +108,7 @@ function App() {
       // tell server to wipe its history first
       await fetch(`${API_BASE}/new`, { method: "POST" });
 
-      // only after server confirms, clear all client state
+      // only after server confirms, clear all client states
       setGenre("");
       setTone("");
       setTheme("");
@@ -118,6 +119,7 @@ function App() {
       setLastPrompt(null);
     } catch (error) {
       console.error("Error starting new story:", error);
+      alert("Error starting new story. Please try again.");
     } finally {
       setLoading(false);
     }
