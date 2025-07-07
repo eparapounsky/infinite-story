@@ -7,8 +7,8 @@ describe("POST /story", () => {
       .post("/story")
       .send({
         prompt: "A dragon in the mountains",
-        genre: "fantasy",
         tone: "epic",
+        genre: "fantasy",
         theme: "freedom",
       })
       .set("Accept", "application/json");
@@ -16,5 +16,5 @@ describe("POST /story", () => {
     expect(Array.isArray(response.body)).toBe(true);
     expect(response.body[0]).toHaveProperty("story");
     expect(response.body[1]).toHaveProperty("image");
-  });
+  }, 50000); // extended timeout (50 secs) for OpenAI API response
 });
