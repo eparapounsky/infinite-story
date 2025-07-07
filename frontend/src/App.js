@@ -223,7 +223,10 @@ function App() {
         </button>
       </div>
 
-      <footer>© 2025 Elena Parapounsky. All rights reserved.</footer>
+      <footer>
+        <p> © 2025 Elena Parapounsky. All rights reserved. </p>
+        <a href="https://github.com/eparapounsky/infinite-story">Source on GitHub</a>
+      </footer>
     </div>
   );
 }
