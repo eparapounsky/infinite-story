@@ -128,7 +128,7 @@ app.post("/undo", (req, res) => {
     console.error("Error occurred undoing story: ", error);
 
     // send error message to frontend
-    return res.status(500).json({ error: errorMessage });
+    return res.status(500).json({ error: "Error occurred undoing story." });
   }
 });
 
