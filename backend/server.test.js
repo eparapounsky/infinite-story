@@ -1,0 +1,43 @@
+import request from "supertest";
+import app from "./server.js";
+
+// all tests for the POST /story endpoint
+describe(
+  "POST /story",
+  () => {
+    // test case for correctly generating a story and image given appropriate parameters
+    // arg 1: test description
+    // arg 2: async function that runs the test
+    // arg 3: timeout in milliseconds (50 seconds)
+    it("should return a story and image", async () => {
+      const response = await request(app)
+        .post("/story") // send POST request to /story endpoint
+        .send({
+          // send request body with story parameters
+          prompt: "flowers",
+          tone: "epic",
+          genre: "fantasy",
+          theme: "freedom",
+        })
+        .set("Accept", "application/json"); // set the accept header to expect JSON response
+      expect(response.statusCode).toBe(200); // check if the response status code is 200 OK
+      expect(Array.isArray(response.body)).toBe(true); // check if the response body is an array
+      expect(response.body[0]).toHaveProperty("story"); // check if the first element has a property "story"
+      expect(response.body[1]).toHaveProperty("image"); // check if the second element has a property "image"
+    }, 50000);
+  },
+  // test case for handling inappropriate prompt that leads to an error
+  it("should return an error for inappropriate prompt", async () => {
+    const response = await request(app)
+      .post("/story")
+      .send({
+        prompt: "murder",
+        tone: "dark",
+        genre: "horror",
+        theme: "survival",
+      })
+      .set("Accept", "application/json");
+    expect(response.statusCode).toBe(500); // check if the response status code is 500 Internal Server Error
+    expect(response.body).toHaveProperty("error"); // check if the response body has an error property
+  })
+);
