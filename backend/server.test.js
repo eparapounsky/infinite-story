@@ -1,7 +1,6 @@
 import request from "supertest";
 import app from "./server.js";
 
-// tests for the POST /story endpoint
 describe(
   "POST /story",
   () => {
@@ -42,7 +41,6 @@ describe(
   })
 );
 
-// tests for the POST /new endpoint
 describe("POST /new", () => {
   // test case for resetting the story history
   it("should reset the story history", async () => {
@@ -53,7 +51,6 @@ describe("POST /new", () => {
   });
 });
 
-// tests for the POST /undo endpoint
 describe("POST /undo", () => {
   // test case for undoing the last turn in the story
   it("should undo the last turn", async () => {
