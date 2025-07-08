@@ -1,3 +1,5 @@
+// run 'npx eslint .' to check for linting errors in all files in current directory
+
 import js from "@eslint/js";
 import globals from "globals";
 import pluginReact from "eslint-plugin-react";
