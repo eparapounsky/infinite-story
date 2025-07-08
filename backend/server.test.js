@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "./server.js";
 
-// all tests for the POST /story endpoint
+// tests for the POST /story endpoint
 describe(
   "POST /story",
   () => {
@@ -41,3 +41,25 @@ describe(
     expect(response.body).toHaveProperty("error"); // check if the response body has an error property
   })
 );
+
+// tests for the POST /new endpoint
+describe("POST /new", () => {
+  // test case for resetting the story history
+  it("should reset the story history", async () => {
+    const response = await request(app)
+      .post("/new")
+      .set("Accept", "application/json");
+    expect(response.statusCode).toBe(200); // check if the response status code is 200 OK
+  });
+});
+
+// tests for the POST /undo endpoint
+describe("POST /undo", () => {
+  // test case for undoing the last turn in the story
+  it("should undo the last turn", async () => {
+    const response = await request(app)
+      .post("/undo")
+      .set("Accept", "application/json");
+    expect(response.statusCode).toBe(200); // check if the response status code is 200 OK
+  });
+});
