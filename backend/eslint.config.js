@@ -1,4 +1,5 @@
 // run 'npx eslint .' to check for linting errors in all files in current directory
+// run 'npx eslint [filename]' to check for linting errors in a specific file
 
 import js from "@eslint/js";
 import globals from "globals";
