@@ -45,6 +45,8 @@ app.post("/story", async (req, res) => {
   try {
     // build a styled prompt using genre, tone, and theme
     let styledPrompt = "";
+
+    // if this is the first chunk, build a full prompt
     if (history.length === 1) {
       styledPrompt =
         [
@@ -72,30 +74,58 @@ app.post("/story", async (req, res) => {
       model: "gpt-3.5-turbo",
       messages: history,
       max_completion_tokens: 250, // length of story
-      stop: ["<<END>>"],
+      stop: ["<<END>>"], // use a stop sequence to avoid cutting off mid-sentence
+      stream: true, // enable streaming to get response in chunks
     });
 
-    // receive story response from OpenAI + add GPT response to history
-    const story_response = completion.choices[0].message.content;
-    history.push({ role: "assistant", content: story_response });
+    let storyChunk = "";
+
+    // stream GPT output
+    for await (const chunk of completion) {
+      const content = chunk.choices[0].delta.content;
+
+      if (content) {
+        storyChunk += content;
+        res.write(JSON.stringify({ story: content }) + "\n"); // send each chunk to client as it arrives
+      }
+    }
+
+    history.push({ role: "assistant", content: storyChunk }); // add GPT response to history
 
     // use GPT's response to generate image
     const result = await openai.images.generate({
       model: "dall-e-3",
-      prompt: `Create a family-friendly image based on: ${story_response}`, // avoid image_generation_user_error
+      prompt: `Create a family-friendly image based on: ${storyChunk}`, // avoid image_generation_user_error
       size: "1024x1024",
     });
 
-    // receive image response from OpenAI
-    const image_response = result.data[0].url;
+    // after streaming story, send image url as a final JSON line
+    res.write(JSON.stringify({ image: result.data[0].url }) + "\n"); 
+    res.end(); // end stream
 
-    // send story and image to frontend
-    let story_and_image = [
-      { story: story_response },
-      { image: image_response },
-    ];
+    // -------------------// -------------------
+    // receive story response from OpenAI + add GPT response to history
+    // const story_response = completion.choices[0].message.content;
+    // history.push({ role: "assistant", content: story_response });
 
-    return res.json(story_and_image);
+    // // use GPT's response to generate image
+    // const result = await openai.images.generate({
+    //   model: "dall-e-3",
+    //   prompt: `Create a family-friendly image based on: ${story_response}`, // avoid image_generation_user_error
+    //   size: "1024x1024",
+    // });
+
+    // // receive image response from OpenAI
+    // const image_response = result.data[0].url;
+
+    // // send story and image to frontend
+    // let story_and_image = [
+    //   { story: story_response },
+    //   { image: image_response },
+    // ];
+
+    // return res.json(story_and_image);
+    // -------------------// -------------------
   } catch (error) {
     console.error("Error occurred creating story: ", error);
 
