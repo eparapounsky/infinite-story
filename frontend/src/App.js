@@ -28,9 +28,44 @@ function App() {
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
-      // unpack the [ { story }, { image } ] response array
-      const [storyObj, imageObj] = data;
+      setLastPrompt(payload); // save the last prompt for future use
+      setStory(""); // clear previous story (to avoid appending to previous chunk)
+
+      const reader = response.body.getReader(); // ReadableStream reader to read response byte stream in chunks
+      const decoder = new TextDecoder(); // TextDecoder to turn streaming bytes into text
+      let buffer = ""; // to temporarily hold incomplete lines
+      let fullStory = "";
+
+      while (true) {
+        const { value, done } = await reader.read(); // read next chunk of bytes
+        if (done) break; // exit loop if no more data
+
+        buffer += decoder.decode(value, { stream: true }); // decode bytes to string and append to buffer
+        let lines = buffer.split("\n"); // split buffer into lines by newline character
+        buffer = lines.pop(); // keep the last line in buffer (it might be incomplete)
+
+        // process each complete line
+        // each line should be a JSON object with either story or image property
+        for (const line of lines) {
+          if (!line.trim()) continue; // skip empty lines
+
+          const obj = JSON.parse(line); // parse JSON object from line
+
+          if (obj.story) {
+            // if the object has a story property
+            setStory((prev) => prev + obj.story); // update UI as chunks arrive
+            fullStory += obj.story; // accumulate full story
+          }
+
+          if (obj.image) {
+            // if the object has an image property
+            setImageUrl(obj.image);
+          }
+        }
+      }
+
+      // after reading all chunks, update the story state with the full story
+      setStory(fullStory);
 
       // only push if there's something to go back to
       if (story && imageUrl) {
@@ -41,12 +76,30 @@ function App() {
         ]);
       }
 
-      // set new story and image
-      setStory(storyObj.story);
-      setImageUrl(imageObj.image);
+      //-----------------------------------------------
+      // const data = await response.json();
+      // // unpack the [ { story }, { image } ] response array
+      // const [storyObj, imageObj] = data;
+
+      // // only push if there's something to go back to
+      // if (story && imageUrl) {
+      //   // include the prompt that generated this chunk
+      //   setHistoryStack((stack) => [
+      //     ...stack,
+      //     { story, imageUrl, prompt: lastPrompt },
+      //   ]);
+      // }
+
+      // // set new story and image
+      // setStory(storyObj.story);
+      // setImageUrl(imageObj.image);
+      //-----------------------------------------------
     } catch (error) {
-      console.error("Error creating story:", error);
-      alert(`Error creating story or image. Please try again.`);
+      console.error("Error creating story or image:", error);
+
+      alert(
+        `Error creating story or image. Note that some inappropriate prompts, such as those involving violence or other explicit content, will not generate an image. Please try again with a different prompt.`
+      );
     } finally {
       setLoading(false); // stop loading
     }
@@ -57,21 +110,61 @@ function App() {
     if (!lastPrompt || loading) return;
     setLoading(true);
     try {
-      // 1) Instruct server to drop the current chunk
+      // tell server to drop the current chunk
       await fetch(`${API_BASE}/undo`, { method: "POST" });
 
-      // 2) Re-POST the exact same payload to /story
+      // re-POST the exact same payload to /story
       const response = await fetch(`${API_BASE}/story`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(lastPrompt),
       });
-      const data = await response.json();
-      const [storyObj, imageObj] = data;
 
-      // 3) Update UI with regenerated chunk
-      setStory(storyObj.story);
-      setImageUrl(imageObj.image);
+      setStory(""); // clear previous story (to avoid appending to previous chunk)
+      const reader = response.body.getReader(); // ReadableStream reader to read response byte stream in chunks
+      const decoder = new TextDecoder(); // TextDecoder to turn streaming bytes into text
+      let buffer = ""; // to temporarily hold incomplete lines
+      let fullStory = "";
+
+      while (true) {
+        const { value, done } = await reader.read(); // read next chunk of bytes
+        if (done) break; // exit loop if no more data
+
+        buffer += decoder.decode(value, { stream: true }); // decode bytes to string and append to buffer
+        let lines = buffer.split("\n"); // split buffer into lines by newline character
+        buffer = lines.pop(); // keep the last line in buffer (it might be incomplete)
+
+        // process each complete line
+        // each line should be a JSON object with either story or image property
+        for (const line of lines) {
+          if (!line.trim()) continue; // skip empty lines
+
+          const obj = JSON.parse(line); // parse JSON object from line
+
+          if (obj.story) {
+            // if the object has a story property
+            setStory((prev) => prev + obj.story); // update UI as chunks arrive
+            fullStory += obj.story; // accumulate full story
+          }
+
+          if (obj.image) {
+            // if the object has an image property
+            setImageUrl(obj.image);
+          }
+        }
+      }
+
+      // after reading all chunks, update the story state with the full story
+      setStory(fullStory);
+
+      //-----------------------------------------------
+      // const data = await response.json();
+      // const [storyObj, imageObj] = data;
+
+      // // 3) Update UI with regenerated chunk
+      // setStory(storyObj.story);
+      // setImageUrl(imageObj.image);
+      //-----------------------------------------------
     } catch (error) {
       console.error("Error regenerating story:", error);
       alert(`Error regenerating story or image. Please try again.`);
@@ -227,7 +320,9 @@ function App() {
 
       <footer>
         <p> © 2025 Elena Parapounsky. All rights reserved. </p>
-        <a href="https://github.com/eparapounsky/infinite-story">🔍 Source on GitHub</a>
+        <a href="https://github.com/eparapounsky/infinite-story">
+          🔍 Source on GitHub
+        </a>
       </footer>
     </div>
   );
