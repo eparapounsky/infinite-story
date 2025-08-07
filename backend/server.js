@@ -32,7 +32,7 @@ let history = [
   },
 ];
 
-// ------------------- endpoint to begin + continue story -------------------
+// endpoint to begin + continue story
 app.post("/story", async (req, res) => {
   const { prompt, genre, tone, theme } = req.body;
 
@@ -100,10 +100,10 @@ app.post("/story", async (req, res) => {
     });
 
     // after streaming story, send image url as a final JSON line
-    res.write(JSON.stringify({ image: result.data[0].url }) + "\n"); 
+    res.write(JSON.stringify({ image: result.data[0].url }) + "\n");
     res.end(); // end stream
 
-    // -------------------// -------------------
+    // ------------------- non-streaming version (commented out for now) -------------------
     // receive story response from OpenAI + add GPT response to history
     // const story_response = completion.choices[0].message.content;
     // history.push({ role: "assistant", content: story_response });
@@ -125,7 +125,7 @@ app.post("/story", async (req, res) => {
     // ];
 
     // return res.json(story_and_image);
-    // -------------------// -------------------
+    // ------------------- non-streaming version (commented out for now) -------------------
   } catch (error) {
     console.error("Error occurred creating story: ", error);
 
@@ -140,7 +140,7 @@ app.post("/story", async (req, res) => {
   }
 });
 
-// ------------------- endpoint to undo last turn -------------------
+// endpoint to undo last turn
 app.post("/undo", (req, res) => {
   try {
     // remove the last assistant message and its corresponding user prompt
@@ -162,7 +162,7 @@ app.post("/undo", (req, res) => {
   }
 });
 
-// ------------------- endpoint to reset story history -------------------
+// endpoint to reset story history
 app.post("/new", async (req, res) => {
   try {
     // wipe the entire conversation context
@@ -183,7 +183,7 @@ app.post("/new", async (req, res) => {
   }
 });
 
-// ------------------- static serve the react build -------------------
+// static serve the react build
 // point express at the “frontend/build” folder, so any file request under /static, /favicon.ico, etc., will be served automatically
 app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 
@@ -192,33 +192,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
 
-// ------------------- start the server -------------------
+// start the server
 app.listen(PORT, () => {
   console.log(`App  listening on port ${PORT}`);
 });
 
-// ------------------- export the app for testing purposes to import it in test files -------------------
+// export the app for testing purposes to import it in test files
 export default app;
-
-// Citation for file structure
-// Date: 4/22/2025
-// Adapted from: https://expressjs.com/en/starter/hello-world.html
-
-// Citation for adding OpenAI API
-// Date: 4/27/2025
-// Copied from: https://community.openai.com/t/import-error-with-openaiapi-in-node-js-project/549074
-
-// Citation for call to OpenAI API
-// Date: 4/27/2025
-// Adapted from: https://www.npmjs.com/package/openai#:~:text=openai/openai%27%3B-,Usage,-The%20full%20API
-// List of available models: https://platform.openai.com/docs/models
-
-// Citation for context management
-// Date: 5/8/2025
-// Adapted from: https://platform.openai.com/docs/guides/conversation-state?api-mode=responses
-
-// Citation for DALL-E image generation
-// Date: 5/9/2025
-// Adapted from: https://platform.openai.com/docs/guides/image-generation?image-generation-model=dall-e-3
-// using DALLE 3 for higher quality & more realistic images (DALLE 2 is unreliable); cost $0.04 per image
-// pricing: https://platform.openai.com/docs/pricing#image-generation
