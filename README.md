@@ -18,3 +18,8 @@ See the project [here](https://infinite-story.up.railway.app/)
 - **Railway**: Serves the React build and hosts the Express backend
 - **OpenAI GPT API**: For generating story content based on user prompts
 - **OpenAI DALL-E API** : For generating contextual images based on story content
+
+## Preview
+<img width="500" height="740" alt="Screenshot 2025-08-06 190549" src="https://github.com/user-attachments/assets/3065a684-ca10-4828-acef-c2742205d989" />
+
+
