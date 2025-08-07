@@ -76,7 +76,7 @@ function App() {
         ]);
       }
 
-      //-----------------------------------------------
+      // ------------------- non-streaming version (commented out for now) -------------------
       // const data = await response.json();
       // // unpack the [ { story }, { image } ] response array
       // const [storyObj, imageObj] = data;
@@ -93,7 +93,7 @@ function App() {
       // // set new story and image
       // setStory(storyObj.story);
       // setImageUrl(imageObj.image);
-      //-----------------------------------------------
+      // ------------------- non-streaming version (commented out for now) -------------------
     } catch (error) {
       console.error("Error creating story or image:", error);
 
@@ -157,14 +157,14 @@ function App() {
       // after reading all chunks, update the story state with the full story
       setStory(fullStory);
 
-      //-----------------------------------------------
+      // ------------------- non-streaming version (commented out for now) -------------------
       // const data = await response.json();
       // const [storyObj, imageObj] = data;
 
       // // 3) Update UI with regenerated chunk
       // setStory(storyObj.story);
       // setImageUrl(imageObj.image);
-      //-----------------------------------------------
+      // ------------------- non-streaming version (commented out for now) -------------------
     } catch (error) {
       console.error("Error regenerating story:", error);
       alert(`Error regenerating story or image. Please try again.`);
