@@ -32,14 +32,30 @@ let history = [
   },
 ];
 
-// endpoint to begin + continue story
+/**
+ * Santizize user's input to ensure it's safe for processing.
+ *
+ * @param {string} prompt - The input string to sanitize.
+ * @returns {string} The sanitized prompt string.
+ */
+function sanitizePrompt(prompt) {
+  let sanitizedPrompt = prompt.trim();
+  sanitizedPrompt = sanitizedPrompt.replace(/<[^>]*>?/gm, ""); // remove HTML tags
+  return sanitizedPrompt;
+}
+
+// endpoint to begin + continue + regeneratestory
 app.post("/story", async (req, res) => {
   const { prompt, genre, tone, theme } = req.body;
 
   // validation for prompt
-  if (!prompt || prompt.trim() === "") {
-    res.status(400).json({ error: "Prompt is empty." });
-    return;
+  // if (!prompt || prompt.trim() === "") {
+  //   res.status(400).json({ error: "Prompt is empty." });
+  //   return;
+  // }
+  let sanitizedPrompt = sanitizePrompt(prompt);
+  if (!sanitizedPrompt) {
+    return res.status(400).json({ error: "Prompt is empty." });
   }
 
   try {
@@ -53,7 +69,7 @@ app.post("/story", async (req, res) => {
           "Give the beginning of",
           tone ? `a ${tone}` : "an entertaining",
           genre ? `${genre} story` : "story",
-          `about "${prompt.trim()}"`,
+          `about "${sanitizedPrompt.trim()}"`,
           theme ? `with a theme of ${theme}.` : ".",
           "Write under 200 words in complete sentences. Finish every sentence without cutting off mid-thought.",
         ]
@@ -62,7 +78,7 @@ app.post("/story", async (req, res) => {
     } else {
       // subsequent chunks: incorporate whatever the user typed into the continuation cue
       styledPrompt =
-        `Continue the story about "${prompt.trim()}" ` +
+        `Continue the story about "${sanitizedPrompt.trim()}" ` +
         `in under 200 words. Carry the plot forward smoothly. Finish every sentence without cutting off mid-thought.`;
     }
 
@@ -99,8 +115,7 @@ app.post("/story", async (req, res) => {
       size: "1024x1024",
     });
 
-    // after streaming story, send image url as a final JSON line
-    res.write(JSON.stringify({ image: result.data[0].url }) + "\n");
+    res.write(JSON.stringify({ image: result.data[0].url }) + "\n"); // after streaming story, send image url as a final JSON line
     res.end(); // end stream
 
     // ------------------- non-streaming version (commented out for now) -------------------
@@ -137,7 +152,6 @@ app.post("/undo", (req, res) => {
   try {
     // remove the last assistant message and its corresponding user prompt
     let removed = 0;
-
     for (let i = history.length - 1; i >= 0 && removed < 2; i--) {
       if (history[i].role !== "system") {
         history.splice(i, 1);
@@ -146,7 +160,7 @@ app.post("/undo", (req, res) => {
     }
     // acknowledge success so client can safely update its UI
     // needed because otherwise the client will not receive any response
-    // and will not update its UI
+    // and will hang/time out
     return res.sendStatus(200);
   } catch (error) {
     console.error("Error in POST /undo: ", error);
@@ -166,7 +180,6 @@ app.post("/new", async (req, res) => {
           "and never apologize or mention missing context; just continue the story seamlessly.",
       },
     ];
-
     // acknowledge success so client can safely clear its UI
     res.sendStatus(200);
   } catch (error) {
