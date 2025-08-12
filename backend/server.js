@@ -144,7 +144,9 @@ app.post("/undo", (req, res) => {
         removed++;
       }
     }
-
+    // acknowledge success so client can safely update its UI
+    // needed because otherwise the client will not receive any response
+    // and will not update its UI
     return res.sendStatus(200);
   } catch (error) {
     console.error("Error in POST /undo: ", error);
@@ -155,7 +157,7 @@ app.post("/undo", (req, res) => {
 // endpoint to reset story history
 app.post("/new", async (req, res) => {
   try {
-    // wipe the entire conversation context
+    // wipe the entire conversation context, leave only system message
     history = [
       {
         role: "system",
