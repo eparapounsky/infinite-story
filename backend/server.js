@@ -127,9 +127,7 @@ app.post("/story", async (req, res) => {
     // return res.json(story_and_image);
     // ------------------- non-streaming version (commented out for now) -------------------
   } catch (error) {
-    console.error("Error occurred creating story: ", error);
-
-    // send error message to frontend
+    console.error("Error in POST /story: ", error);
     return res.status(500).json({ error: "Error occurred creating story." });
   }
 });
@@ -149,9 +147,7 @@ app.post("/undo", (req, res) => {
 
     return res.sendStatus(200);
   } catch (error) {
-    console.error("Error occurred undoing story: ", error);
-
-    // send error message to frontend
+    console.error("Error in POST /undo: ", error);
     return res.status(500).json({ error: "Error occurred undoing story." });
   }
 });
@@ -172,7 +168,7 @@ app.post("/new", async (req, res) => {
     // acknowledge success so client can safely clear its UI
     res.sendStatus(200);
   } catch (error) {
-    console.error("Error occurred resetting story: ", error);
+    console.error("Error in POST /new: ", error);
     res.status(500).json({ error: "Error occurred resetting story." });
   }
 });
