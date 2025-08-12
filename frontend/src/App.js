@@ -4,6 +4,13 @@ import { BiUndo } from "react-icons/bi";
 import { AiOutlineRedo } from "react-icons/ai";
 import React, { useState } from "react";
 
+/**
+ * Main React component for the app.
+ * Handles story generation, image streaming, undo/redo functionality, and UI state management.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Infinite Story Generator UI.
+ */
 function App() {
   const [genre, setGenre] = useState("");
   const [tone, setTone] = useState("");
@@ -101,25 +108,6 @@ function App() {
           { story, imageUrl, prompt: lastPrompt },
         ]);
       }
-
-      // ------------------- non-streaming version (commented out for now) -------------------
-      // const data = await response.json();
-      // // unpack the [ { story }, { image } ] response array
-      // const [storyObj, imageObj] = data;
-
-      // // only push if there's something to go back to
-      // if (story && imageUrl) {
-      //   // include the prompt that generated this chunk
-      //   setHistoryStack((stack) => [
-      //     ...stack,
-      //     { story, imageUrl, prompt: lastPrompt },
-      //   ]);
-      // }
-
-      // // set new story and image
-      // setStory(storyObj.story);
-      // setImageUrl(imageObj.image);
-      // ------------------- non-streaming version (commented out for now) -------------------
     } catch (error) {
       console.error("Error creating story or image:", error);
 
@@ -154,15 +142,6 @@ function App() {
       });
 
       streamStory(response);
-
-      // ------------------- non-streaming version (commented out for now) -------------------
-      // const data = await response.json();
-      // const [storyObj, imageObj] = data;
-
-      // // 3) Update UI with regenerated chunk
-      // setStory(storyObj.story);
-      // setImageUrl(imageObj.image);
-      // ------------------- non-streaming version (commented out for now) -------------------
     } catch (error) {
       console.error("Error regenerating story:", error);
       alert(`Error regenerating story or image. Please try again.`);
@@ -173,7 +152,7 @@ function App() {
 
   /** Undo handler
    * Handles undoing the last story segment by reverting to the previous state.
-   * Updates the story, image URL, and prompt from the history stack, and sends a 
+   * Updates the story, image URL, and prompt from the history stack, and sends a
    * POST request to the undo API endpoint.
    * Prevents undo if there is no history or if loading is in progress.
    *
