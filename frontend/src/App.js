@@ -18,6 +18,15 @@ function App() {
   // read base url from process.env if available
   const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 
+  /**
+   * Streams story and image data from a Response object, updating UI state as chunks arrive.
+   * Expects each line of the response stream to be a JSON object with either a `story` or `image` property.
+   * Accumulates the full story and updates the story state after streaming completes.
+   *
+   * @async
+   * @param {Response} response - The fetch Response object containing a readable stream of story data.
+   * @returns {Promise<void>} Resolves when the entire stream has been processed.
+   */
   async function streamStory(response) {
     setStory(""); // clear previous story (to avoid appending to previous chunk)
     const reader = response.body.getReader(); // ReadableStream reader to read response byte stream in chunks
@@ -57,7 +66,15 @@ function App() {
     setStory(fullStory);
   }
 
-  // Continue handler
+  /** Continue handler
+   * Sends a prompt to the story API, handles the response (streaming or non-streaming),
+   * updates the story, image, and history stack, and manages loading state.
+   *
+   * @async
+   * @function
+   * @param {Object} payload - The prompt data to send to the API.
+   * @returns {Promise<void>}
+   */
   async function continueStory(payload) {
     setLoading(true); // start loading
     try {
@@ -114,7 +131,14 @@ function App() {
     }
   }
 
-  // Regenerate handler
+  /** Regenerate handler
+   * Regenerates the current story chunk by undoing the last prompt and re-posting it to the server.
+   * Updates the UI with the regenerated story and image.
+   *
+   * @async
+   * @function regenerateStory
+   * @returns {Promise<void>} Resolves when the regeneration process is complete.
+   */
   async function regenerateStory() {
     if (!lastPrompt || loading) return;
     setLoading(true);
@@ -147,7 +171,16 @@ function App() {
     }
   }
 
-  // Undo handler
+  /** Undo handler
+   * Handles undoing the last story segment by reverting to the previous state.
+   * Updates the story, image URL, and prompt from the history stack, and sends a 
+   * POST request to the undo API endpoint.
+   * Prevents undo if there is no history or if loading is in progress.
+   *
+   * @async
+   * @function handleUndo
+   * @returns {Promise<void>} Resolves when the undo operation is complete.
+   */
   async function handleUndo() {
     if (historyStack.length === 0 || loading) return; // no history to undo
 
@@ -169,7 +202,14 @@ function App() {
     }
   }
 
-  // New Story handler
+  /** New Story handler
+   * Resets the story by first requesting the server to wipe its history,
+   * then clearing all relevant client-side state variables.
+   *
+   * @async
+   * @function resetStory
+   * @returns {Promise<void>} Resolves when the reset process is complete.
+   */
   async function resetStory() {
     try {
       // tell server to wipe its history first
