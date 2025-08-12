@@ -18,6 +18,45 @@ function App() {
   // read base url from process.env if available
   const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 
+  async function streamStory(response) {
+    setStory(""); // clear previous story (to avoid appending to previous chunk)
+    const reader = response.body.getReader(); // ReadableStream reader to read response byte stream in chunks
+    const decoder = new TextDecoder(); // TextDecoder to turn streaming bytes into text
+    let buffer = ""; // to temporarily hold incomplete lines
+    let fullStory = "";
+
+    while (true) {
+      const { value, done } = await reader.read(); // read next chunk of bytes
+      if (done) break; // exit loop if no more data
+
+      buffer += decoder.decode(value, { stream: true }); // decode bytes to string and append to buffer
+      let lines = buffer.split("\n"); // split buffer into lines by newline character
+      buffer = lines.pop(); // keep the last line in buffer (it might be incomplete)
+
+      // process each complete line
+      // each line should be a JSON object with either story or image property
+      for (const line of lines) {
+        if (!line.trim()) continue; // skip empty lines
+
+        const obj = JSON.parse(line); // parse JSON object from line
+
+        if (obj.story) {
+          // if the object has a story property
+          setStory((prev) => prev + obj.story); // update UI as chunks arrive
+          fullStory += obj.story; // accumulate full story
+        }
+
+        if (obj.image) {
+          // if the object has an image property
+          setImageUrl(obj.image);
+        }
+      }
+    }
+
+    // after reading all chunks, update the story state with the full story
+    setStory(fullStory);
+  }
+
   // Continue handler
   async function continueStory(payload) {
     setLoading(true); // start loading
@@ -35,43 +74,7 @@ function App() {
       }
 
       setLastPrompt(payload); // save the last prompt for future use
-      setStory(""); // clear previous story (to avoid appending to previous chunk)
-
-      const reader = response.body.getReader(); // ReadableStream reader to read response byte stream in chunks
-      const decoder = new TextDecoder(); // TextDecoder to turn streaming bytes into text
-      let buffer = ""; // to temporarily hold incomplete lines
-      let fullStory = "";
-
-      while (true) {
-        const { value, done } = await reader.read(); // read next chunk of bytes
-        if (done) break; // exit loop if no more data
-
-        buffer += decoder.decode(value, { stream: true }); // decode bytes to string and append to buffer
-        let lines = buffer.split("\n"); // split buffer into lines by newline character
-        buffer = lines.pop(); // keep the last line in buffer (it might be incomplete)
-
-        // process each complete line
-        // each line should be a JSON object with either story or image property
-        for (const line of lines) {
-          if (!line.trim()) continue; // skip empty lines
-
-          const obj = JSON.parse(line); // parse JSON object from line
-
-          if (obj.story) {
-            // if the object has a story property
-            setStory((prev) => prev + obj.story); // update UI as chunks arrive
-            fullStory += obj.story; // accumulate full story
-          }
-
-          if (obj.image) {
-            // if the object has an image property
-            setImageUrl(obj.image);
-          }
-        }
-      }
-
-      // after reading all chunks, update the story state with the full story
-      setStory(fullStory);
+      streamStory(response);
 
       // only push if there's something to go back to
       if (story && imageUrl) {
@@ -126,42 +129,7 @@ function App() {
         body: JSON.stringify(lastPrompt),
       });
 
-      setStory(""); // clear previous story (to avoid appending to previous chunk)
-      const reader = response.body.getReader(); // ReadableStream reader to read response byte stream in chunks
-      const decoder = new TextDecoder(); // TextDecoder to turn streaming bytes into text
-      let buffer = ""; // to temporarily hold incomplete lines
-      let fullStory = "";
-
-      while (true) {
-        const { value, done } = await reader.read(); // read next chunk of bytes
-        if (done) break; // exit loop if no more data
-
-        buffer += decoder.decode(value, { stream: true }); // decode bytes to string and append to buffer
-        let lines = buffer.split("\n"); // split buffer into lines by newline character
-        buffer = lines.pop(); // keep the last line in buffer (it might be incomplete)
-
-        // process each complete line
-        // each line should be a JSON object with either story or image property
-        for (const line of lines) {
-          if (!line.trim()) continue; // skip empty lines
-
-          const obj = JSON.parse(line); // parse JSON object from line
-
-          if (obj.story) {
-            // if the object has a story property
-            setStory((prev) => prev + obj.story); // update UI as chunks arrive
-            fullStory += obj.story; // accumulate full story
-          }
-
-          if (obj.image) {
-            // if the object has an image property
-            setImageUrl(obj.image);
-          }
-        }
-      }
-
-      // after reading all chunks, update the story state with the full story
-      setStory(fullStory);
+      streamStory(response);
 
       // ------------------- non-streaming version (commented out for now) -------------------
       // const data = await response.json();
