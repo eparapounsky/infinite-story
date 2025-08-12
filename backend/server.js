@@ -49,10 +49,6 @@ app.post("/story", async (req, res) => {
   const { prompt, genre, tone, theme } = req.body;
 
   // validation for prompt
-  // if (!prompt || prompt.trim() === "") {
-  //   res.status(400).json({ error: "Prompt is empty." });
-  //   return;
-  // }
   let sanitizedPrompt = sanitizePrompt(prompt);
   if (!sanitizedPrompt) {
     return res.status(400).json({ error: "Prompt is empty." });
@@ -117,30 +113,6 @@ app.post("/story", async (req, res) => {
 
     res.write(JSON.stringify({ image: result.data[0].url }) + "\n"); // after streaming story, send image url as a final JSON line
     res.end(); // end stream
-
-    // ------------------- non-streaming version (commented out for now) -------------------
-    // receive story response from OpenAI + add GPT response to history
-    // const story_response = completion.choices[0].message.content;
-    // history.push({ role: "assistant", content: story_response });
-
-    // // use GPT's response to generate image
-    // const result = await openai.images.generate({
-    //   model: "dall-e-3",
-    //   prompt: `Create a family-friendly image based on: ${story_response}`, // avoid image_generation_user_error
-    //   size: "1024x1024",
-    // });
-
-    // // receive image response from OpenAI
-    // const image_response = result.data[0].url;
-
-    // // send story and image to frontend
-    // let story_and_image = [
-    //   { story: story_response },
-    //   { image: image_response },
-    // ];
-
-    // return res.json(story_and_image);
-    // ------------------- non-streaming version (commented out for now) -------------------
   } catch (error) {
     console.error("Error in POST /story: ", error);
     return res.status(500).json({ error: "Error occurred creating story." });
