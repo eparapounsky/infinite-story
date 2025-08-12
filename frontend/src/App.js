@@ -28,6 +28,12 @@ function App() {
         body: JSON.stringify(payload),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error || "Something went wrong."}`);
+        return;
+      }
+
       setLastPrompt(payload); // save the last prompt for future use
       setStory(""); // clear previous story (to avoid appending to previous chunk)
 
