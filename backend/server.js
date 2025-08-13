@@ -17,20 +17,18 @@ const PORT = process.env.PORT || 5000; // default to 5000 locally
 // set up middleware
 app.use(cors());
 app.use(express.json());
-// rate limiting middleware
 const limiter = rateLimit({
+  // rate limiting middleware
   windowMs: 60 * 1000, // 1 minute
   limit: 5, // limit each IP to 5 requests per window (1 min)
   message: { error: "Too many requests, please try again later." },
 });
-app.use(limiter)
+app.use(limiter);
 
 // initialize OpenAI client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-
 
 // initialize conversation history with high level instructions
 let history = [
