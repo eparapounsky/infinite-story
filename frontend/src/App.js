@@ -1,8 +1,8 @@
-import "./App.css";
-import { IoMdArrowForward } from "react-icons/io";
-import { BiUndo } from "react-icons/bi";
+import { useState } from "react";
 import { AiOutlineRedo } from "react-icons/ai";
-import React, { useState } from "react";
+import { BiUndo } from "react-icons/bi";
+import { IoMdArrowForward } from "react-icons/io";
+import "./App.css";
 
 /**
  * Main React component for the app.
