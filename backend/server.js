@@ -7,6 +7,7 @@ import OpenAI from "openai";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import rateLimit from "express-rate-limit";
 // derive __dirname for ES module scope
 const __filename = fileURLToPath(import.meta.url); // __filename is the absolute path to this file
 const __dirname = path.dirname(__filename); // __dirname is the directory that contains this file
@@ -16,11 +17,20 @@ const PORT = process.env.PORT || 5000; // default to 5000 locally
 // set up middleware
 app.use(cors());
 app.use(express.json());
+// rate limiting middleware
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  limit: 5, // limit each IP to 5 requests per window (1 min)
+  message: { error: "Too many requests, please try again later." },
+});
+app.use(limiter)
 
 // initialize OpenAI client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+
 
 // initialize conversation history with high level instructions
 let history = [
@@ -33,7 +43,7 @@ let history = [
 ];
 
 /**
- * Santizize user's input to ensure it's safe for processing.
+ * Santizizes user input to make sure it's safe for processing.
  *
  * @param {string} prompt - The input string to sanitize.
  * @returns {string} The sanitized prompt string.
