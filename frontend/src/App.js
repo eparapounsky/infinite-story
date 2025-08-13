@@ -264,7 +264,7 @@ function App() {
 
       {/* loading indicator */}
       {loading && (
-        <div className="loading">{/* <p>Generating story & image…</p> */}</div>
+        <div className="loading"></div>
       )}
 
       {/* display generated image if available */}
