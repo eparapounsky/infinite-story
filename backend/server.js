@@ -2,12 +2,12 @@
 import dotenv from "dotenv";
 dotenv.config();
 // import APIs
-import express from "express";
-import OpenAI from "openai";
 import cors from "cors";
+import express from "express";
+import rateLimit from "express-rate-limit";
+import OpenAI from "openai";
 import path from "path";
 import { fileURLToPath } from "url";
-import rateLimit from "express-rate-limit";
 // derive __dirname for ES module scope
 const __filename = fileURLToPath(import.meta.url); // __filename is the absolute path to this file
 const __dirname = path.dirname(__filename); // __dirname is the directory that contains this file
@@ -52,7 +52,7 @@ function sanitizePrompt(prompt) {
   return sanitizedPrompt;
 }
 
-// endpoint to begin + continue + regeneratestory
+// endpoint to begin + continue + regenerate story
 app.post("/story", async (req, res) => {
   const { prompt, genre, tone, theme } = req.body;
 
