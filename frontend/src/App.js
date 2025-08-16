@@ -20,7 +20,7 @@ function App() {
   const [imageUrl, setImageUrl] = useState("");
   const [historyStack, setHistoryStack] = useState([]);
   const [lastPrompt, setLastPrompt] = useState(null);
-  const [loading, setLoading] = useState(false); // loading state
+  const [imageLoading, setImageLoading] = useState(false);
 
   // read base url from process.env if available
   const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
@@ -64,11 +64,11 @@ function App() {
 
         if (obj.image) {
           // if the object has an image property
+          setImageLoading(true); // start image loading state
           setImageUrl(obj.image);
         }
       }
     }
-
     // after reading all chunks, update the story state with the full story
     setStory(fullStory);
   }
@@ -83,7 +83,7 @@ function App() {
    * @returns {Promise<void>}
    */
   async function continueStory(payload) {
-    setLoading(true); // start loading
+    setImageLoading(false); // reset image loading state
     try {
       const response = await fetch(`${API_BASE}/story`, {
         method: "POST",
@@ -98,7 +98,7 @@ function App() {
       }
 
       setLastPrompt(payload); // save the last prompt for future use
-      streamStory(response);
+      await streamStory(response);
 
       // only push if there's something to go back to
       if (story && imageUrl) {
@@ -114,8 +114,6 @@ function App() {
       alert(
         `Error creating story or image. Note that some inappropriate prompts, such as those involving violence or other explicit content, will not generate an image. Please try again with a different prompt.`
       );
-    } finally {
-      setLoading(false); // stop loading
     }
   }
 
@@ -128,8 +126,8 @@ function App() {
    * @returns {Promise<void>} Resolves when the regeneration process is complete.
    */
   async function regenerateStory() {
-    if (!lastPrompt || loading) return;
-    setLoading(true);
+    if (!lastPrompt) return;
+    setImageLoading(false); // reset image loading state
     try {
       // tell server to drop the current chunk
       await fetch(`${API_BASE}/undo`, { method: "POST" });
@@ -141,12 +139,10 @@ function App() {
         body: JSON.stringify(lastPrompt),
       });
 
-      streamStory(response);
+      await streamStory(response);
     } catch (error) {
       console.error("Error regenerating story:", error);
       alert(`Error regenerating story or image. Please try again.`);
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -161,9 +157,7 @@ function App() {
    * @returns {Promise<void>} Resolves when the undo operation is complete.
    */
   async function handleUndo() {
-    if (historyStack.length === 0 || loading) return; // no history to undo
-
-    setLoading(true);
+    if (historyStack.length === 0) return; // no history to undo
 
     try {
       const prevEntry = historyStack[historyStack.length - 1];
@@ -176,8 +170,6 @@ function App() {
     } catch (error) {
       console.error("Error undoing story segment:", error);
       alert("Error undoing last action. Please try again.");
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -206,8 +198,6 @@ function App() {
     } catch (error) {
       console.error("Error starting new story:", error);
       alert("Error starting new story. Please try again.");
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -218,7 +208,7 @@ function App() {
       </div>
 
       <div className="new-div">
-        <button onClick={resetStory} disabled={loading}>
+        <button onClick={resetStory}>
           New Story
         </button>
       </div>
@@ -262,13 +252,18 @@ function App() {
         </select>
       </div>
 
-      {/* loading indicator */}
-      {loading && <div className="loading"></div>}
+      {/* loading indicator - only show when image is loading */}
+      {imageLoading && <div className="loading"></div>}
 
       {/* display generated image if available */}
       {imageUrl && (
         <div className="image">
-          <img src={imageUrl} alt="Story illustration" />
+          <img
+            src={imageUrl}
+            alt="Story illustration"
+            onLoad={() => setImageLoading(false)}
+            onError={() => setImageLoading(false)}
+          />
         </div>
       )}
 
@@ -290,7 +285,7 @@ function App() {
             setLastPrompt(payload);
             continueStory(payload);
           }}
-          disabled={loading || prompt.trim() === ""}
+          disabled={prompt.trim() === ""}
         >
           Continue <IoMdArrowForward />
         </button>
@@ -298,13 +293,13 @@ function App() {
         {/* undo button pops last state from history */}
         <button
           onClick={handleUndo}
-          disabled={loading || historyStack.length === 0}
+          disabled={historyStack.length === 0}
         >
           Undo <BiUndo />
         </button>
 
         {/* regenerate button reuses lastPrompt */}
-        <button onClick={regenerateStory} disabled={loading || !lastPrompt}>
+        <button onClick={regenerateStory} disabled={!lastPrompt}>
           Regenerate <AiOutlineRedo />
         </button>
       </div>
