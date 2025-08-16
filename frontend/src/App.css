@@ -297,9 +297,6 @@ footer a:hover {
   }
 
   .loading {
-    /* force loader to occupy row 4 of the grid, spanning both story/image columns */
-    grid-row: 4 / 5;
-    grid-column: 1 / -1;
     /* give loader a white, semi opaque background */
     background: rgba(255, 255, 255, 0.8);
   }
