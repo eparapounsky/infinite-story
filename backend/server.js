@@ -23,7 +23,6 @@ const limiter = rateLimit({
   limit: 5, // limit each IP to 5 requests per window (1 min)
   message: { error: "Too many requests, please try again later." },
 });
-// app.use(limiter);
 
 // initialize OpenAI client
 const openai = new OpenAI({
