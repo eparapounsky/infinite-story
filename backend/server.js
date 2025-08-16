@@ -23,7 +23,7 @@ const limiter = rateLimit({
   limit: 5, // limit each IP to 5 requests per window (1 min)
   message: { error: "Too many requests, please try again later." },
 });
-app.use(limiter);
+// app.use(limiter);
 
 // initialize OpenAI client
 const openai = new OpenAI({
@@ -53,7 +53,7 @@ function sanitizePrompt(prompt) {
 }
 
 // endpoint to begin + continue + regenerate story
-app.post("/story", async (req, res) => {
+app.post("/story", limiter, async (req, res) => {
   const { prompt, genre, tone, theme } = req.body;
 
   // validation for prompt
