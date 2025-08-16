@@ -64,7 +64,6 @@ function App() {
 
         if (obj.image) {
           // if the object has an image property
-          setImageLoading(true); // start image loading state
           setImageUrl(obj.image);
         }
       }
@@ -98,6 +97,7 @@ function App() {
       }
 
       setLastPrompt(payload); // save the last prompt for future use
+      setImageLoading(true); 
       await streamStory(response);
 
       // only push if there's something to go back to
@@ -108,6 +108,7 @@ function App() {
           { story, imageUrl, prompt: lastPrompt },
         ]);
       }
+      setImageLoading(false); 
     } catch (error) {
       console.error("Error creating story or image:", error);
 
@@ -138,7 +139,8 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(lastPrompt),
       });
-
+      
+      setImageLoading(true);
       await streamStory(response);
     } catch (error) {
       console.error("Error regenerating story:", error);
