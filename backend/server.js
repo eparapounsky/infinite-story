@@ -72,7 +72,7 @@ app.post("/story", limiter, async (req, res) => {
           "Give the beginning of",
           tone ? `a ${tone}` : "an entertaining",
           genre ? `${genre} story` : "story",
-          `about "${sanitizedPrompt.trim()}"`,
+          `about "${sanitizedPrompt}"`,
           theme ? `with a theme of ${theme}.` : ".",
           "Write under 200 words in complete sentences. Finish every sentence without cutting off mid-thought.",
         ]
