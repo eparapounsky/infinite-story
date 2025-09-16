@@ -81,7 +81,7 @@ app.post("/story", limiter, async (req, res) => {
     } else {
       // subsequent chunks: incorporate whatever the user typed into the continuation cue
       styledPrompt =
-        `Continue the story about "${sanitizedPrompt.trim()}" ` +
+        `Continue the story about "${sanitizedPrompt}" ` +
         `in under 200 words. Carry the plot forward smoothly. Finish every sentence without cutting off mid-thought.`;
     }
 
