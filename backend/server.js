@@ -18,14 +18,19 @@ const __dirname = path.dirname(__filename); // __dirname is the directory that c
 const app = express();
 const PORT = process.env.PORT || 5000; // default to 5000 locally
 
+// configuration constants
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX = 5; // limit each IP to 5 requests per window
+const MAX_STORY_TOKENS = 250;
+
 // set up middleware
 app.use(cors());
 app.use(express.json());
 
 const limiter = rateLimit({
   // rate limiting middleware
-  windowMs: 60 * 1000, // 1 minute
-  limit: 5, // limit each IP to 5 requests per window
+  windowMs: RATE_LIMIT_WINDOW,
+  limit: RATE_LIMIT_MAX,
   message: { error: "Too many requests, please try again later." },
 });
 
@@ -99,7 +104,7 @@ app.post("/story", limiter, async (req, res) => {
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: history,
-      max_completion_tokens: 250, // length of story
+      max_completion_tokens: MAX_STORY_TOKENS,
       stop: ["<<END>>"], // use a stop sequence to avoid cutting off mid-sentence
       stream: true, // enable streaming to get response in chunks
     });
