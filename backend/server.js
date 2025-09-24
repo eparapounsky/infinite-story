@@ -86,7 +86,12 @@ function buildStyledPrompt(sanitizedPrompt, { genre, tone, theme }, isFirstChunk
   }
 }
 
-// endpoint to begin + continue + regenerate story
+/**
+ * POST /story
+ * Generates a new story chunk and image based on user prompt.
+ * Request body: { prompt, genre, tone, theme }
+ * Response: Streams story text chunks, then image URL.
+ */
 app.post("/story", limiter, async (req, res) => {
   try {
     const { prompt, genre, tone, theme } = req.body;
@@ -138,10 +143,12 @@ app.post("/story", limiter, async (req, res) => {
   }
 });
 
-// endpoint to undo last turn
+/**
+ * POST /undo
+ * Removes the last user prompt and assistant messages from the story history.
+ */
 app.post("/undo", (req, res) => {
   try {
-    // remove the last assistant message and its corresponding user prompt
     let removed = 0;
     for (let i = history.length - 1; i >= 0 && removed < 2; i--) {
       if (history[i].role !== "system") {
@@ -158,10 +165,12 @@ app.post("/undo", (req, res) => {
   }
 });
 
-// endpoint to reset story history
+/**
+ * POST /new
+ * Wipes the entire conversation context, leaving only the system message.
+ */
 app.post("/new", async (req, res) => {
   try {
-    // wipe the entire conversation context, leave only system message
     history = [
       {
         role: "system",
