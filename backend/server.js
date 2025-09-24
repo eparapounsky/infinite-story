@@ -1,6 +1,7 @@
 // load environment variables
 import dotenv from "dotenv";
 dotenv.config();
+
 // import APIs
 import cors from "cors";
 import express from "express";
@@ -8,19 +9,23 @@ import rateLimit from "express-rate-limit";
 import OpenAI from "openai";
 import path from "path";
 import { fileURLToPath } from "url";
+
 // derive __dirname for ES module scope
 const __filename = fileURLToPath(import.meta.url); // __filename is the absolute path to this file
 const __dirname = path.dirname(__filename); // __dirname is the directory that contains this file
+
 // create app
 const app = express();
 const PORT = process.env.PORT || 5000; // default to 5000 locally
+
 // set up middleware
 app.use(cors());
 app.use(express.json());
+
 const limiter = rateLimit({
   // rate limiting middleware
   windowMs: 60 * 1000, // 1 minute
-  limit: 5, // limit each IP to 5 requests per window (1 min)
+  limit: 5, // limit each IP to 5 requests per window
   message: { error: "Too many requests, please try again later." },
 });
 
@@ -40,8 +45,7 @@ let history = [
 ];
 
 /**
- * Santizizes user input to make sure it's safe for processing.
- *
+ * Sanitizes user input to make sure it's safe for processing.
  * @param {string} prompt - The input string to sanitize.
  * @returns {string} The sanitized prompt string.
  */
@@ -51,41 +55,44 @@ function sanitizePrompt(prompt) {
   return sanitizedPrompt;
 }
 
+/**
+ * Builds a styled prompt based on user parameters
+ * @param {Object} params - The prompt parameters
+ * @param {boolean} isFirstChunk - Whether this is the first story chunk
+ * @returns {string} The styled prompt
+ */
+function buildStyledPrompt(sanitizedPrompt, { genre, tone, theme }, isFirstChunk) {
+  if (isFirstChunk) {
+    return [
+      "Give the beginning of",
+      tone ? `a ${tone}` : "an entertaining",
+      genre ? `${genre} story` : "story",
+      `about "${sanitizedPrompt.trim()}"`,
+      theme ? `with a theme of ${theme}.` : ".",
+      "Write under 200 words in complete sentences.",
+    ]
+      .filter(Boolean)
+      .join(" ") + ".";
+  } else {
+    // subsequent chunks: incorporate whatever the user typed into the continuation cue
+    styledPrompt =
+      `Continue the story about "${sanitizedPrompt.trim()}" ` +
+      `in under 200 words. Carry the plot forward smoothly.`;
+  }
+}
+
 // endpoint to begin + continue + regenerate story
 app.post("/story", limiter, async (req, res) => {
-  const { prompt, genre, tone, theme } = req.body;
-
-  // validation for prompt
-  let sanitizedPrompt = sanitizePrompt(prompt);
-  if (!sanitizedPrompt) {
-    return res.status(400).json({ error: "Prompt is empty." });
-  }
-
   try {
-    // build a styled prompt using genre, tone, and theme
-    let styledPrompt = "";
+    const { prompt, genre, tone, theme } = req.body;
 
-    // if this is the first chunk, build a full prompt
-    if (history.length === 1) {
-      styledPrompt =
-        [
-          "Give the beginning of",
-          tone ? `a ${tone}` : "an entertaining",
-          genre ? `${genre} story` : "story",
-          `about "${sanitizedPrompt.trim()}"`,
-          theme ? `with a theme of ${theme}.` : ".",
-          "Write under 200 words in complete sentences. Finish every sentence without cutting off mid-thought.",
-        ]
-          .filter(Boolean)
-          .join(" ") + ".";
-    } else {
-      // subsequent chunks: incorporate whatever the user typed into the continuation cue
-      styledPrompt =
-        `Continue the story about "${sanitizedPrompt.trim()}" ` +
-        `in under 200 words. Carry the plot forward smoothly. Finish every sentence without cutting off mid-thought.`;
+    const sanitizedPrompt = sanitizePrompt(prompt);
+    if (!sanitizedPrompt) {
+      return res.status(400).json({ error: "Prompt is empty." });
     }
 
-    // add user prompt to history
+    const isFirstChunk = history.length === 1;
+    const styledPrompt = buildStyledPrompt(sanitizedPrompt, { genre, tone, theme }, isFirstChunk)
     history.push({ role: "user", content: styledPrompt });
 
     // send prompt to OpenAI
@@ -138,8 +145,7 @@ app.post("/undo", (req, res) => {
       }
     }
     // acknowledge success so client can safely update its UI
-    // needed because otherwise the client will not receive any response
-    // and will hang/time out
+    // needed because otherwise the client will not receive any response and will hang/time out
     return res.sendStatus(200);
   } catch (error) {
     console.error("Error in POST /undo: ", error);
