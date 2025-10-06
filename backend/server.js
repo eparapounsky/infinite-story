@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 5000; // default to 5000 locally
 
 // configuration constants
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
-const RATE_LIMIT_MAX = 5; // limit each IP to 5 requests per window
+const RATE_LIMIT_MAX = 15; // limit each IP to 15 requests per window
 const MAX_STORY_TOKENS = 250;
 
 // set up middleware
