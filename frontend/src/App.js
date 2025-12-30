@@ -97,7 +97,7 @@ function App() {
       }
 
       setLastPrompt(payload); // save the last prompt for future use
-      setImageLoading(true); 
+      setImageLoading(true);
       await streamStory(response);
 
       // only push if there's something to go back to
@@ -108,7 +108,7 @@ function App() {
           { story, imageUrl, prompt: lastPrompt },
         ]);
       }
-      setImageLoading(false); 
+      setImageLoading(false);
     } catch (error) {
       console.error("Error creating story or image:", error);
 
@@ -139,7 +139,7 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(lastPrompt),
       });
-      
+
       setImageLoading(true);
       await streamStory(response);
     } catch (error) {
@@ -307,7 +307,7 @@ function App() {
       </div>
 
       <footer>
-        <p> © 2025 Elena Parapounsky. All rights reserved. </p>
+        <p> © 2026 Elena Parapounsky. All rights reserved. </p>
         <a href="https://github.com/eparapounsky/infinite-story">
           🔍 Source on GitHub
         </a>
